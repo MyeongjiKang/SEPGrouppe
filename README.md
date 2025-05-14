@@ -1,5 +1,5 @@
 <h1 align="center">Hi 👋, I'm Myeongji Kang</h1>
-<h3 align="center">This project is a SaaS-based groupware service, developed as the final project at DDIT between 25th February and 17th April 2025.</h3>
+<h3 align="center">This project is a SaaS-based groupware service called 'SEPGrouppe', developed as the final project at DDIT between 25th February and 17th April 2025.</h3>
 
 My responsibilities included the development and design of the webhard, mail, chat, and calendar modules.<br> 
 As the User Agent (UA), I led the front-end architecture and implementation, utilizing Bootstrap's tile-based system for the overall user interface (UI) design.
