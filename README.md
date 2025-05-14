@@ -1,8 +1,12 @@
 <h1 align="center">Hi 👋, I'm Myeongji Kang</h1>
 <h3 align="center">This project is a SaaS-based groupware service called 'SEPGrouppe', developed as the final project at DDIT between 25th February and 17th April 2025.</h3>
 
+The team name 'SEPGrouppe' combines 'Sep' from September, the month we began the DDIT class, and 'Septem' (Latin for seven), representing our seven team members.
+
 My responsibilities included the development and design of the webhard, mail, chat, and calendar modules.<br> 
 As the User Agent (UA), I led the front-end architecture and implementation, utilizing Bootstrap's tile-based system for the overall user interface (UI) design.
+
+Despite the challenges inherent in a first team project, this holds significant meaning and is something I am very proud of.
 
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=flat-square&logo=openjdk&logoColor=white)
 ![Spring](https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=spring&logoColor=white)
