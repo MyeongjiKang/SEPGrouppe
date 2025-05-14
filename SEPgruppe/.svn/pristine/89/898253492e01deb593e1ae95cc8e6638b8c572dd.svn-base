@@ -1,0 +1,250 @@
+<!-- 
+ * 새 결재 문서 작성
+ * == 개정이력(Modification Information) ==
+ *   
+ *   수정일      			수정자           수정내용
+ *  ============   	============== =======================
+ *  2025. 3. 25.     	JYS            최초 생성
+ *
+-->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<style>
+    .btn {
+        background: none;
+        border: none;
+        color: inherit;
+        font-size: 1rem;
+        cursor: pointer;
+        padding: 5px 10px;
+    }
+    .btn:hover {
+        text-decoration: underline;
+    }
+    
+    .tree-container {
+        width: 100%;
+        height: 600px; /* 높이 고정 */
+        border: 1px solid #ccc; /* 테두리 추가 */
+        padding: 10px;
+        overflow: hidden; /* 부모 요소에서는 스크롤 안 생기게 */
+    }
+    
+    #tree {
+        width: 100%;
+        height: 100%; /* 부모 높이를 따라감 */
+        overflow: auto; /* 내용이 많아지면 스크롤 생성 */
+    }
+    
+    #templateDetails{
+    	background: white;
+    	width: 100%;
+        height: 650px; /* 부모 높이를 따라감 */
+        overflow: auto; /* 내용이 많아지면 스크롤 생성 */
+    }
+    
+    #apprLineDiv{
+    	background:white;
+    	width: 100%;
+        height: 100%; /* 부모 높이를 따라감 */
+        overflow: auto; /* 내용이 많아지면 스크롤 생성 */
+    }
+    
+   #depDropArea { 
+    	width: 300px;
+      	height: 100px;
+      	border: 2px dashed #aaa;
+      	text-align: center;
+      	ine-height: 100px;
+      	margin-top: 20px;
+      	background-color: #f9f9f9;
+    } 
+    
+    
+</style>
+<div>
+	<button type="button" class="btn" onclick="location.href='apprForm.jsp'">
+		<i class="fa fa-paper-plane"></i>결재요청
+	</button>
+	<button type="button" class="btn" data-bs-dismiss="modal" onclick="">
+		<i class="fa fa-save"></i>임시저장
+	</button>
+	<button type="button" class="btn" data-bs-dismiss="modal" onclick="previewContent()">
+		<i class="fa fa-eye"></i>미리보기
+	</button>
+	<button type="button" class="btn" data-bs-dismiss="modal" onclick="history.back()">
+		<i class="fa fa-times-circle"></i>취소
+	</button>
+	<button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#apprInfoModal">
+		<i class="fa fa-file-alt"></i>결재정보
+	</button>
+</div>
+<hr />
+<div class="container-fluid">
+	<div class="row">
+         	 <!-- 결재양식 선택 (좌측)-->
+		<div id="tree-conotainer" class="col-md-2" >
+			<span>결재 양식 선택</span>
+			<form id="searchDoc">
+				<div class="input-group">
+				    <input type="text" id="searchDoc-input" class="form-control" placeholder="양식 제목">
+				    <button type="submit" class="btn btn-outline-primary">🔍</button>
+				</div>
+			</form>
+				<div id= "tree">
+	    			<!--ajax 응답 -->
+	    		</div>
+        </div>
+        <!-- 결재양식 상세보기(우측) -->
+        <div class="col ">
+        	결재 양식 상세보기
+         	<div id="templateDetails">
+         		
+         		<!-- <textarea class="form-control" id="editor" name ="content" >양식을 선택하면 상세 정보가 표시됩니다.</textarea> -->
+         	</div>
+       	</div>
+       	
+    </div>
+    <div>
+    	<div id ="apprLineDiv" class="row">
+       		<span>결재선</span>
+       		<table class="table">
+       			<tr>
+       				<td>프로필 이미지</td>
+       				<td>이름+직급</td>
+       				<td>부서</td>
+       				<td>기안/참조/열람</td>
+       			</tr>
+       		</table>
+       	</div>
+    </div>
+ </div>
+
+<!-- 결재 정보 모달 -->
+<div class="modal fade" id="apprInfoModal" tabindex="-1" role="dialog" aria-labelledby="apprInfoModalLabel" aria-modal="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="apprInfoModalLabel">결재정보</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      	<div class="container-fluid">
+      		<div class="card-body">
+			    <ul class="nav nav-tabs nav-line nav-color-secondary" id="line-tab" role="tablist">
+			        <li class="nav-item">
+			            <a class="nav-link" id="line-appr-tab" href="" role="tab" aria-controls="pills-appr" aria-selected="true">결재선</a>
+			        </li>
+			         <li class="nav-item">
+			            <a class="nav-link" id="line-ref-tab" href="" role="tab" aria-controls="pills-ref" aria-selected="true">참조자</a>
+			        </li>
+			        <li class="nav-item">
+			            <a class="nav-link" id="line-view-tab" href="" role="tab" aria-controls="pills-view" aria-selected="true">열람자</a>
+			        </li>
+			    </ul>
+			</div>
+    		<div class="row">
+    			<div class="col-md-4" id="modal-tree-container">
+    				<table>
+    					<thead>
+    						<tr>
+    							<th>조직도</th>
+    							<th>나의 결재선</th>
+    						</tr>
+    					</thead>
+    				</table>
+    				<!-- 결재선 조회 -->
+			          <div id="depTree">
+			            <!-- ajax 응답 -->
+			          </div>
+    			</div>
+    			<div class="col-md-6">
+    				<table class="table">
+    					<thead>
+    						<tr>
+	    						<th>&nbsp;</th>
+	    						<th>타입</th>
+	    						<th>이름</th>
+	    						<th>부서</th>
+	    						<th>상태</th>
+	    						<th><i class="fa fa-trash"></i></th>
+    						</tr>
+    					</thead>
+    					<tbody id="approvalTableBody">
+	    					<tr>
+						      <td colspan="6">결재선</td>
+						    </tr>
+						 <!-- 여기에 드랍된 행들이 추가됩니다. -->
+						 
+						</tbody>
+    				</table>
+    			</div>
+    		</div>
+    	</div>
+    	<!-- 모달 내부에서만 토스트 표시 -->
+		<div id="modalToastContainer" class="position-absolute top-0 start-50 translate-middle-x p-3" style="z-index: 1050;">
+		    <div id="modalDuplicateToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+		        <div class="d-flex">
+		            <div class="toast-body">
+		                ⚠ 이미 추가된 결재선입니다.
+		            </div>
+		            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+		        </div>
+		    </div>
+		</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-primary">저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+	CKEDITOR.replace('txta_editor', {
+		versionCheck: false,
+        height: 600, // 원하는 높이(px)
+        width: '100%' // 가로 크기(퍼센트 또는 px)
+    });
+});
+
+let newWindow = null; // 전역변수로 미리보기 창 참조
+
+function previewContent() {
+    const editor = CKEDITOR.instances['editor'];  // CKEditor 인스턴스 가져오기
+
+    if (!editor) {
+        alert("CKEditor가 초기화되지 않았습니다.");
+        return;  // editor가 초기화되지 않았을 경우 미리보기 기능 실행하지 않음
+    }
+
+    const content = editor.getData();  // CKEditor에서 입력한 HTML 가져오기
+    localStorage.setItem("ckeditor_content", content);
+    
+ 	// 이미 열려 있는 미리보기 창이 있다면 닫기
+    if (newWindow && !newWindow.closed) {
+        newWindow.close();
+    }
+
+    // 새 창 열기
+     newWindow = window.open(`${pageContext.request.contextPath}/${companyNo}/content`, "_blank", "width=800,height=600");
+ 
+  	// 창을 닫거나 새로고침할 때 localStorage 초기화
+     window.addEventListener("beforeunload", () => {
+         localStorage.removeItem("ckeditor_content");
+     });
+}
+
+
+</script>
+
+<!-- js -->
+<script src="${pageContext.request.contextPath }/resources/fancytree/modules/jquery.fancytree.dnd.js"></script>	<!-- drag and drop -->
+<script src="${pageContext.request.contextPath }/resources/groupware/js/approval/apprForm_ft.js"></script>
+<script src="${pageContext.request.contextPath }/resources/groupware/js/organization/depForm_ft.js"></script>
+

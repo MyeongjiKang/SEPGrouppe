@@ -1,0 +1,109 @@
+document.addEventListener('DOMContentLoaded', function() {
+    let calendarEl = document.getElementById('calendar'); // 캘린더 요소
+    let draggableEl = document.getElementById('external-events'); // 드래그 가능한 이벤트 리스트
+	
+	let Draggable = FullCalendar.Draggable;
+	
+	// 외부 이벤트 드래그 가능하도록 설정
+	new Draggable(draggableEl, {
+	    itemSelector: '.fc-event', // 드래그 가능한 이벤트 클래스 지정
+	    eventData: function(eventEl) {
+	        return {
+	            title: eventEl.innerText.trim(), // 드래그한 이벤트 제목
+	            duration: '01:00', // 기본 1시간짜리 이벤트
+				allDay: false
+	        };
+	    }
+	});
+
+    // FullCalendar 생성
+    let calendar = new FullCalendar.Calendar(calendarEl, {
+        plugins: [ FullCalendar.Interaction.default ], // 인터랙션 플러그인 추가
+        initialView: 'dayGridMonth',
+        locale: 'ko',
+        editable: true, // 캘린더 내에서 이벤트 이동 가능
+        droppable: true, // 외부 이벤트 드롭 가능
+        events: clist, // 기존 이벤트 리스트
+        // 일정 클릭 시 모달 호출 (상세조회 이벤트)
+        eventClick: function(info) {
+            let eventUrl = info.event.url;
+            info.jsEvent.preventDefault();
+
+            if (eventUrl) {
+                $.ajax({
+                    url: eventUrl,
+                    type: "GET",
+                    dataType: "html",
+                    success: function(detail) {
+						console.log("==================================================dsfksdjfk");
+						console.log(detail);
+                        $("#scheduleModal .modal-body").html(detail);
+                        $("#scheduleModal").modal("show");
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("AJAX 오류:", status, error);
+                        alert("일정 상세 정보를 불러오는 데 실패했습니다.");
+                    }
+                });
+            }
+        },
+
+        // 드래그해서 이벤트 추가 기능 (나중에 할 예정)
+        eventReceive: function(info) {
+        console.log("드롭된 이벤트:", info.event);
+		calendar.addEvent({
+		                id: info.event.id,
+		                title: info.event.title,
+		                start: info.event.start,
+		                allDay: info.event.allDay
+		            });
+        },
+		
+		// 칸 선택시 일정 추가 이벤트
+		dateClick: function(info){
+			console.log("dfwgrewgrger");
+			console.log(info);
+			let txt =`
+				<h5>HELLO</h5>
+				이벤트:<input id="event_name" type="text" />
+				<a class="button" href="javascript:myevent()" >적용</a>
+			
+			`;
+
+			
+			$("#scheduleModal .modal-body").html(txt);
+			$("#scheduleModal").modal("show");
+		}
+    });
+
+    calendar.render();
+
+});
+
+
+
+function myevent(){
+	console.log(clist);
+	console.log(companyNo);
+	console.log(contextPath);
+	console.log( `${contextPath}/${companyNo}/schedule/createSchedule.ajax?menu=666`);
+	
+	
+	$.ajax({
+		url: `${contextPath}/${companyNo}/schedule/createSchedule.ajax?menu=666`,
+		type: "GET",
+		dataType:"json",
+		success: function(resp) {
+			console.log("==================================================dsfksdjfk");
+			console.log(resp);
+			//$("#scheduleModal .modal-body").html(detail);
+			//$("#scheduleModal").modal("show");
+		},
+		error: function(xhr, status, error) {
+			console.error("AJAX 오류:", status, error);
+			alert("일정 상세 정보를 불러오는 데 실패했습니다.");
+		}
+	});
+
+
+}

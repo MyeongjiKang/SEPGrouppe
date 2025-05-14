@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.works.mybatis.mappers.CompanyMapper">
+
+	<!-- 아이디 중복 확인 -->
+	<select id="countByContactId" parameterType="String" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM COMPANIES
+		WHERE contact_id = #{contactId}
+	</select>
+
+	<!-- 사업자등록번호 중복 확인 -->
+	<select id="countByBusinessRegNo" parameterType="String" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM COMPANIES
+		WHERE business_reg_no = #{businessRegNo}
+	</select>
+
+	<insert id="insertCompany">
+	    INSERT INTO COMPANIES (
+	        CONTACT_ID,
+	        COMPANY_NAME,
+	        CONTACT_NM,
+	        CONTACT_PHONE,
+	        CONTACT_EMAIL,
+	        CONTACT_PW,
+	        BUSINESS_REG_NO
+	    ) VALUES (
+	        #{contactId},
+	        #{companyName},
+	        #{contactNm},
+	        #{contactPhone},
+	        #{contactEmail},
+	        #{contactPw},
+	        #{businessRegNo}
+	    )
+	</insert>
+</mapper>

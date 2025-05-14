@@ -1,0 +1,90 @@
+package kr.or.ddit.works.approval.service;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
+import kr.or.ddit.works.approval.vo.DocFolderVO;
+import kr.or.ddit.works.approval.vo.DocFormVO;
+
+/**
+ * 전자결재 서비스
+ * @author JYS
+ * @since 2025. 3. 17.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 17.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+public interface ApprDocService {
+	
+    /**
+     * 결재 양식 폴더 전체 조회
+     * @return 모든 양식 폴더 리스트
+     */
+    public List<DocFormVO> selectListAllDocForm();
+    
+    /**
+     * 결재 양식 제목을 검색 시 해당 양식만 조회
+     * @return 검색된 양식 조회
+     */
+    public List<DocFormVO> selectListSearchDocForm(@Param("docFrmName")String docFrmName);
+    
+    /**
+     * 해당 폴더에 저장된 결재문서만 목록으로 조회
+     * @param docFolderNo
+     * @return
+     */
+    public List<DocFormVO> selectDocument(@Param("docFolderNo")String docFolderNo);
+    
+    /**
+     * 문서 상세보기
+     * @param docFrmNo 문서 번호
+     * @return 
+     */
+    public DocFormVO selectdocFrmDeatil(@Param("docFrmNo")String docFrmNo);
+    
+    
+    /**
+     * 관리자 - 새 문서 추가
+     * @param docFormVo 추가할 문서 정보
+     * @return 성공 여부 (1: 성공, 0: 실패)
+     */
+    public boolean insertDocForm(DocFormVO docFormVo);
+    
+    /**
+     * 관리자 - 문서 HTML 추가 또는 수정
+     * @param docFormVo 추가할 문서 정보
+     * @return 성공 여부 (1: 성공, 0: 실패)
+     */
+    public boolean updateDocFormHtml(DocFormVO docFormVo);
+    
+    /**
+     * 관리자 - 문서 수정 (제목, 내용 등)
+     * @param docFormVo 수정할 문서 정보
+     * @return 성공 여부 (1: 성공, 0: 실패)
+     */
+    public boolean updateDocForm(DocFormVO docFormVo);
+    
+    /**
+     * 관리자 - 문서 비활성화 (삭제 대신 사용)
+     * @param docFrmNo 문서 번호
+     * @return 성공 여부 (1: 성공, 0: 실패)
+     */
+    public boolean deactivateDocForm(@Param("docFrmNo") String docFrmNo);
+    
+    /**
+     * 관리자 - 문서 활성화
+     * @param docFrmNo 문서 번호
+     * @return 성공 여부 (1: 성공, 0: 실패)
+     */
+    public boolean activateDocForm(@Param("docFrmNo") String docFrmNo);
+    
+
+}

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.works.mybatis.mappers.OrganizationMapper">
+
+<select id="selectOrganization">
+    SELECT
+	    EMP_ID
+	  , EMP_PW
+	  , COMPANY_NO
+	  , DEPT_NAME
+	  , DEPT_CD
+	  , POSITION_NAME
+	  , ROLE_NAME
+	  , EMP_NO
+	  , EMP_NM
+	  , EMP_ZIP
+	  , EMP_ADD1
+	  , EMP_ADD2
+	  , EMP_EMAIL
+	  , EMP_PHONE
+	  , EMP_REGDATE
+	  , EMP_RETIRE
+	  , EMP_IMG
+	  , MANAGER_EMP_ID
+	FROM
+	    ORGANIZATION
+	WHERE EMP_ID = #{empId}
+</select>
+	
+	<select id="selectParentDep" resultType="DepartmentVO">
+		SELECT
+		    dept_cd
+		  , parent_dept_cd
+		  , dept_name
+		  , manager_emp_id
+		  , create_at
+		  , company_no
+		FROM
+		    department
+		WHERE PARENT_DEPT_CD IS NULL
+		AND company_no = #{companyNo}
+	</select>
+	
+	<select id="selectChildDep" parameterType="string" resultType="DepartmentVO">
+		SELECT
+		    dept_cd
+		  , parent_dept_cd
+		  , dept_name
+		  , manager_emp_id
+		  , create_at
+		  , company_no
+		FROM
+		    department
+		WHERE PARENT_DEPT_CD = #{deptCd}
+		AND company_no = #{companyNo}
+	</select>
+	
+	<select id="selectEmployee" parameterType="string" resultType="EmployeeVO">
+		SELECT
+		    e.emp_id
+		  , e.company_no
+		  , e.position_cd
+		  , p.position_name
+		  , e.dept_cd
+		  , e.emp_no
+		  , e.emp_nm
+		  , e.emp_pw
+		  , e.emp_zip
+		  , e.emp_add1
+		  , e.emp_add2
+		  , e.emp_email
+		  , e.emp_phone
+		  , to_char(e.emp_regdate, 'YYYY-MM-DD') as emp_regdate
+		  , e.emp_retire
+		  , e.emp_img
+		  , e.emp_bank
+		  , e.emp_depositor
+		  , e.emp_bankno
+		  , e.emp_gender
+		FROM
+		    employee e
+		LEFT OUTER JOIN POSITION p ON e.POSITION_CD = p.POSITION_CD
+		WHERE 
+		    dept_cd=#{deptCd}
+		AND company_no = #{companyNo}
+	</select>
+	<select id="searchEmployees" resultType="OrganizationVO">
+        SELECT *
+        FROM organization 
+        WHERE emp_retire = '0'
+          AND company_no = #{companyNo}
+          AND (emp_nm LIKE '%' || #{keyword} || '%' 
+               OR emp_id LIKE '%' || #{keyword} || '%')
+    </select>
+
+    <!-- 부서별 검색 -->
+    <select id="searchByDepartment" resultType="OrganizationVO">
+        SELECT *
+        FROM organization
+        WHERE dept_name = #{deptName}
+          AND company_no = #{companyNo}
+          AND emp_nm LIKE '%' || #{keyword} || '%'
+    </select>
+</mapper>

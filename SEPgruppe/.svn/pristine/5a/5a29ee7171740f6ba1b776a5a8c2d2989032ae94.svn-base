@@ -1,0 +1,79 @@
+/** 
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ * 2025. 3. 26.     	KKM            최초 생성
+ *
+ * </pre>
+ */
+function initializeGantt(gantTaskList, companyNo) {
+    // 유효한 태스크만 필터링
+    const validTasks = gantTaskList.filter(task => {
+        const startDate = new Date(task.start_date);
+        const endDate = new Date(task.due_date);
+
+        // 날짜 유효성 검사
+        if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+            console.warn(`Invalid task date detected. Task ID: ${task.id}, Start: ${task.start_date}, End: ${task.due_date}`);
+            return false;
+        }
+
+        // 시작 날짜가 종료 날짜보다 빠른지 확인
+        return startDate <= endDate;
+    });
+
+    console.log("Valid Gantt Tasks:", validTasks);
+
+    // DHTMLX Gantt 초기화
+    gantt.init("gantt");
+
+    // 태스크 데이터 로드
+    gantt.parse({
+        data: validTasks,
+        links: [] // 링크 데이터 (없으면 빈 배열)
+    });
+
+    // 이벤트 핸들러
+    gantt.attachEvent("onTaskClick", function (id) {
+        const task = gantt.getTask(id);
+        console.log("Task clicked:", task);
+        return true; // 기본 동작 유지
+    });
+
+    gantt.attachEvent("onAfterTaskUpdate", function (id, item) {
+        console.log(`Task updated: ${item.text}, Start: ${item.start_date}, End: ${item.due_date}`);
+    });
+
+    gantt.attachEvent("onTaskProgressChange", function (id, progress) {
+        const task = gantt.getTask(id);
+        console.log(`Progress updated: ${task.text}, Progress: ${progress * 100}%`);
+    });
+
+    gantt.templates.scale_cell_class = function (date) {
+        console.log(`View mode changed to: ${gantt.config.scale_unit}`);
+    };
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

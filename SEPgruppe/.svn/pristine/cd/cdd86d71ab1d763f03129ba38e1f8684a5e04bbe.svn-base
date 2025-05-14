@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.works.mybatis.mappers.AnnualLeaveMapper">
+<resultMap id="annualMap" type="AnnualLeaveVO" autoMapping="true" />
+
+<select id="selectAnnual" resultMap="annualMap">
+	SELECT
+		annual_leave_no
+		, emp_id
+		, total_leave
+		, used_leave
+		, remaining_leave
+		, leave_year
+		, created_date
+		, updated_date
+	FROM annual_leave
+	WHERE emp_id = #{empId}
+</select>
+
+</mapper>

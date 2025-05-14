@@ -1,0 +1,76 @@
+document.addEventListener("DOMContentLoaded", function() {
+    const basePath = window.location.pathname.split("/").slice(0, -1).join("/");
+    const password = document.getElementById("contactPw");
+    const confirmPassword = document.getElementById("confirmPw");
+    const errorMessage = document.getElementById("passwordMatchError");
+    const submitBtn = document.getElementById("submitBtn");
+
+    const contactId = document.getElementById("contactId");
+    const contactIdError = document.createElement("span");
+    contactIdError.classList.add("text-danger");
+    contactId.after(contactIdError);
+
+    const businessRegNo = document.getElementById("businessRegNo");
+    const businessRegNoError = document.createElement("span");
+    businessRegNoError.classList.add("text-danger");
+    businessRegNo.after(businessRegNoError);
+
+    function validatePasswordMatch() {
+        if (password.value !== confirmPassword.value || password.value === "") {
+            errorMessage.textContent = "패스워드가 일치하지 않습니다.";
+            submitBtn.disabled = true;
+        } else {
+            errorMessage.textContent = "";
+            submitBtn.disabled = false;
+        }
+    }
+
+    contactId.addEventListener("blur", function() {
+        if (contactId.value.length < 5 || contactId.value.length > 15) {
+            contactIdError.textContent = "아이디는 5~15자 이내여야 합니다.";
+            submitBtn.disabled = true;
+            return;
+        } else {
+            contactIdError.textContent = "";
+        }
+
+        fetch(`${basePath}/checkId?contactId=${contactId.value}`)
+            .then(response => response.text())
+            .then(isDuplicate => {
+                if (isDuplicate === "true") {
+                    contactIdError.textContent = "이미 사용 중인 아이디입니다.";
+                    submitBtn.disabled = true;
+                } else {
+                    contactIdError.textContent = "사용 가능한 아이디입니다.";
+                    submitBtn.disabled = false;
+                }
+            })
+            .catch(error => console.error("Error checking ID:", error));
+    });
+
+    businessRegNo.addEventListener("blur", function() {
+        if (businessRegNo.value.length !== 10) {
+            businessRegNoError.textContent = "사업자 등록번호는 10자리여야 합니다.";
+            submitBtn.disabled = true;
+            return;
+        } else {
+            businessRegNoError.textContent = "";
+        }
+
+        fetch(`${basePath}/checkBusinessRegNo?businessRegNo=${businessRegNo.value}`)
+            .then(response => response.text())
+            .then(isDuplicate => {
+                if (isDuplicate === "true") {
+                    businessRegNoError.textContent = "이미 등록된 사업자 번호입니다.";
+                    submitBtn.disabled = true;
+                } else {
+                    businessRegNoError.textContent = "사용 가능한 사업자 번호입니다.";
+                    submitBtn.disabled = false;
+                }
+            })
+            .catch(error => console.error("Error checking Business Reg No:", error));
+    });
+
+    password.addEventListener("input", validatePasswordMatch);
+    confirmPassword.addEventListener("input", validatePasswordMatch);
+});

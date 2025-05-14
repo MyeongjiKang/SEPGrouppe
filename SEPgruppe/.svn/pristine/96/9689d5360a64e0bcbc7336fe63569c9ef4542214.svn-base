@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+ * 전자결재 문서 관련 기능 매퍼
+ *
+ * == 개정이력(Modification Information) ==
+ *   
+ *   수정일      			수정자           수정내용
+ *  ============   	============== =======================
+ *  2025. 3. 17.     	JYS            최초 생성
+ *
+-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.works.mybatis.mappers.ApprDocMapper">
+    
+    <resultMap type="DocFormVO" id="DocFormFolderMap" autoMapping="true">
+        <collection property="docFolderVo" ofType="DocFolderVO" autoMapping="true" />
+    </resultMap>
+
+	<!-- 결재양식 조회 -->
+    <select id="selectListAllDocForm" resultMap="DocFormFolderMap">
+        SELECT
+		    f.doc_frm_no
+		  , f.doc_folder_no
+		  , df.parent_doc_folder
+		  , df.doc_folder_name
+		  , f.doc_frm_name
+		  , f.doc_frm_content
+		  , f.is_enabled
+		  , f.file_group_no
+		
+		FROM
+		    doc_form f left join doc_folder df
+		    on f.doc_folder_no = df.doc_folder_no
+    </select>
+    
+    <!-- 결재양식 제목 검색 결과만 조회 -->
+    <select id="selectListSearchDocForm" parameterType="string" resultMap="DocFormFolderMap">
+    	<bind name="searchPattern" value="'%' + docFrmName + '%'" /> <!-- %를 추가 -->
+    	SELECT
+		    f.doc_frm_no,
+		    f.doc_folder_no,
+		    df.parent_doc_folder,
+		    df.doc_folder_name,
+		    f.doc_frm_name,
+		    f.doc_frm_content,
+		    f.is_enabled,
+		    f.file_group_no
+		FROM
+		    doc_form f
+		LEFT JOIN 
+		    doc_folder df ON f.doc_folder_no = df.doc_folder_no
+		WHERE 
+		    f.doc_frm_name LIKE #{searchPattern}
+
+    </select>
+   
+   	<resultMap type="DocFormVO" id="DocFormDetailMap" autoMapping="true">
+   		<association property="attachFileGroupVo" javaType="AttachFileGroupVO" autoMapping="true">
+   			<collection property="attachFileList" javaType="AttachFileVO" autoMapping="true"></collection>
+   		</association>
+   	</resultMap>
+    <select id="selectdocFrmDeatil" parameterType="string" resultMap="DocFormDetailMap">
+        SELECT 
+		    df.doc_frm_no
+		    , df.doc_folder_no
+		    , df.doc_frm_name
+		    , df.doc_frm_content
+		    , df.is_enabled
+		    , afg.file_group_name
+		    , af.attach_file_no
+		    , af.attach_file_name
+		    , af.attach_org_file_name
+		    , af.attach_file_size
+		    , af.attach_file_path
+		    , af.attach_file_ext
+		    , af.attach_file_date
+		    , af.attach_file_status
+		    , af.emp_id
+		FROM 
+		    doc_form df
+		JOIN 
+		    attach_file_group afg on df.file_group_no = afg.file_group_no
+		JOIN 
+		    attach_file af on afg.file_group_no = af.file_group_no
+		WHERE 
+		    df.doc_frm_no = #{docFrmNo} 
+		    and af.attach_file_status = 'Y'  
+		ORDER BY 
+		    af.attach_file_date DESC
+    </select>
+    
+    <insert id="insertDocForm" parameterType="DocFormVO">
+        INSERT INTO doc_form (
+            doc_frm_no
+            , doc_folder_no
+            , doc_frm_name
+            , doc_frm_content
+            , is_enabled
+        ) VALUES (
+            #{docFrmNo}
+            , #{docFolderNo}
+            , #{docFrmName}
+            , #{docFrmContent, jdbcType=CLOB}
+            , 'Y'
+        )
+    </insert>
+    
+    <update id="updateDocFormHtml" parameterType="DocFormVO">
+        UPDATE 
+            doc_form
+        SET 
+            doc_frm_content = #{docFrmContent, jdbcType=CLOB}
+        WHERE 
+            doc_frm_no = #{docFrmNo}
+    </update>
+    
+    <update id="updateDocForm" parameterType="DocFormVO"> 
+        UPDATE doc_form
+        SET
+            doc_frm_name = #{docFrmName}
+        WHERE
+            doc_frm_no = #{docFrmNo}
+            AND is_enabled = #{isEnabled}
+    </update>
+    
+    <update id="deactivateDocForm" parameterType="string">
+        UPDATE doc_form
+        SET
+            is_enabled = null
+        WHERE
+            doc_frm_no = #{docFrmNo}
+    </update>
+    
+    <update id="activateDocForm" parameterType="string">
+        UPDATE doc_form
+        SET
+            is_enabled = 'Y'
+        WHERE
+            doc_frm_no = #{docFrmNo}
+    </update>
+</mapper>

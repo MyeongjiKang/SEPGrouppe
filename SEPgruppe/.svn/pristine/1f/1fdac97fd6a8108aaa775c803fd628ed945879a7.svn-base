@@ -1,0 +1,37 @@
+package kr.or.ddit.works.notice.vo;
+
+import java.io.Serializable;
+
+import lombok.Data;
+
+
+/**
+ * 공지사항 NOTICE VO
+ * @author JYS
+ * @since 2025. 3. 14.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 14.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+@Data
+public class NoticeVO implements Serializable {
+	
+	private Long noticeNo;      		//공지사항 번호
+	private String empId;      			//사원 아이디
+	private String noticeCategory;      //공지사항 카테고리
+	private String noticeTitle;      	//제목
+	private String noticeContent;      	//내용
+	private String noticeCreatedAt;     //작성일
+	private String noticeUpdatedAt;     //수정일
+	private Long noticeViewCount;      	//조회수
+	private String isDraft;      		//임시저장 여부
+	private Long fileGroupNo;      		//파일그룹번호
+
+}

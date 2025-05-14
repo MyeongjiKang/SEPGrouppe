@@ -1,0 +1,41 @@
+package kr.or.ddit.works.organization.vo;
+
+import java.io.Serializable;
+
+import kr.or.ddit.works.login.vo.AllUserVO;
+import lombok.Data;
+import lombok.ToString;
+
+/**
+ * 사원 EMPLOYEE VO
+ * @author JYS
+ * @since 2025. 3. 12.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 12.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+@Data
+@ToString(callSuper = true)
+public class EmployeeVO extends AllUserVO implements Serializable {
+	private String empId;
+	private String companyNo;
+	private Long positionCd;
+	private String deptCd;
+	private Long empNo;
+	private String empNm;
+	private String empPw;
+	private String empZip;
+	private String empAdd1;
+	private String empAdd2;
+	private String empEmail;
+	private String empPhone;
+	private String empRegdate;
+	private boolean empRetire;
+}

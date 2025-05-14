@@ -1,0 +1,16 @@
+package kr.or.ddit.works.organization.service;
+
+import java.util.List;
+
+import kr.or.ddit.works.organization.vo.DepartmentVO;
+import kr.or.ddit.works.organization.vo.EmployeeVO;
+import kr.or.ddit.works.organization.vo.OrganizationVO;
+
+public interface OrganizationService {
+	 List<DepartmentVO> selectParentDep(String companyNo);
+	 List<DepartmentVO> selectChildDep(String deptCd, String companyNo);
+	 List<EmployeeVO> selectEmployee(String deptCd, String companyNo);
+	 public int addDepartment(DepartmentVO department);
+	 List<OrganizationVO> searchEmployees(String keyword);
+	 List<OrganizationVO> searchByDepartment(String deptName, String keyword);
+}

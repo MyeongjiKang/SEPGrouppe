@@ -1,0 +1,79 @@
+package kr.or.ddit.works.organization.service;
+
+
+import java.io.File;
+
+import javax.inject.Inject;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import kr.or.ddit.works.mybatis.mappers.EmployeeMapper;
+import kr.or.ddit.works.organization.vo.EmployeeVO;
+
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
+
+	@Autowired
+	private EmployeeMapper mapper;
+
+	@Value("#{fileInfo.attachFiles}")
+	private String profileImageUrl;
+	@Value("#{fileInfo.attachFiles}")
+	private Resource profileImageRes;
+	@Value("#{fileInfo.attachFiles}")
+	private File profileImageFolder;
+
+	// 비밀번호 암호화 Update
+	@Inject
+	public PasswordEncoder passwordEncoder;
+
+	// 프로필 사진
+	public void profileImage(EmployeeVO member) {
+		try {
+			MultipartFile profileImage = member.getAttachFile();
+			if(profileImage == null) return;
+
+			String profileImg = member.getEmpImg();
+			File destFile = new File(profileImageFolder, profileImg);
+			profileImage.transferTo(destFile);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * 마이페이지 정보 수정
+	 * @param companyNo 로그인된 고객사번호
+	 * @return
+	 */
+	@Override
+	public boolean updateCompany(EmployeeVO member) {
+
+		if(mapper.updateCompany(member) > 0) {
+
+			// 패스워드 암호화 저장
+			String plain = member.getEmpPw();
+			String encoded = passwordEncoder.encode(plain);
+			member.setEmpPw(encoded);
+
+			profileImage(member);
+
+			return true;
+		}else {
+			return false;
+		}
+	}
+
+	@Override
+	public EmployeeVO selectCompany(String empId) {
+		return mapper.selectCompany(empId);
+	}
+
+
+
+}

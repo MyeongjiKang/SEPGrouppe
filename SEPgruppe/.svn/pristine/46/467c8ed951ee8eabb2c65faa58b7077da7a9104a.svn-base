@@ -1,0 +1,53 @@
+<!-- 
+ * == 개정이력(Modification Information) ==
+ *   
+ *   수정일      			수정자           수정내용
+ *  ============   	============== =======================
+ *  2025. 3. 14.     	JYS            최초 생성
+ *
+-->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<head>
+	<link href="${pageContext.request.contextPath }/resources/groupware/css/common.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath }/resources/groupware/css/project/projectList.css" rel="stylesheet">
+</head>
+<body>
+<div class="biggestContainer">
+    <div class="top-nav">
+        <h1>공유 프로젝트</h1>
+        <button class="btn btn-primary btn-round">생성</button>
+        <input type="text" class="search-bar" placeholder="Search">
+    </div>
+    
+    <nav class="tabs">
+    	<ul class="tabs-menu">
+	        <li>내 프로젝트:</li>
+	        <li>진행중</li>
+	        <li>종료</li>
+        </ul>
+    </nav>
+    
+    <main class="project-container">
+        <table class="table-content">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>이름</th>
+                    <th>생성 날짜</th>
+                    <th>공개 유형</th>
+                    <th>마지막 업데이트</th>
+                    <th>멤버 보기</th>
+                    <th>역할</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 프로젝트 데이터가 없을 경우 -->
+                <tr>
+                    <td colspan="7" class="empty-message">생성된 프로젝트가 없삼</td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</div>    
+</body>    

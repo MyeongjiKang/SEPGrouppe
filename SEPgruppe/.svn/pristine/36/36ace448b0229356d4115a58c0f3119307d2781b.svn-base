@@ -1,0 +1,33 @@
+package kr.or.ddit;
+
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+
+
+
+@Controller
+public class IndexController{
+	
+	
+	@GetMapping("/")
+	public String index(HttpSession session, Model model){
+		// 관리자모드 진입 -> 홈 버튼 눌렀을때 상단 메뉴바 동적 변경을 위한 isAdmin 세션 삭제
+		session.removeAttribute("isAdmin");
+		return "sep:indexSep";
+	}
+	
+
+	@GetMapping("/{companyNo}/groupware")
+	public String index2(
+		@PathVariable String companyNo, Model model
+	){
+		model.addAttribute("companyNo", companyNo);
+		return "gw:indexGW";
+	}
+}

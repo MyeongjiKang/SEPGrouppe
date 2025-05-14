@@ -1,0 +1,142 @@
+<!-- 
+ * == 개정이력(Modification Information) ==
+ *   
+ *   수정일      			수정자           수정내용
+ *  ============   	============== =======================
+ *  2025. 3. 14.     	JYS            최초 생성
+ *
+-->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<head>
+     <link href="${pageContext.request.contextPath }/resources/groupware/css/common.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath }/resources/groupware/css/project/projectList.css" rel="stylesheet">
+    <script>
+        function filterProjects(status) {
+            var table, tr, td, i;
+            table = document.getElementById("projectTable");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 1; i < tr.length; i++) { // skip header row
+                td = tr[i].getElementsByTagName("td")[6]; // 상태 컬럼
+                if (td) {
+                    if (status === "all" || td.textContent.trim() === status) {
+                        tr[i].style.display = ""; // visible
+                    } else {
+                        tr[i].style.display = "none"; // hidden
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="card-body">
+        <ul class="nav nav-tabs nav-line nav-color-secondary" id="line-tab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link" id="line-project-tab" href="${pageContext.request.contextPath}/${companyNo}/project" role="tab" aria-controls="pills-home" aria-selected="true">프로젝트</a>
+            </li>
+             <li class="nav-item">
+		        <a class="nav-link" id="line-work-tab" href="${pageContext.request.contextPath}/${companyNo}/task" role="tab" aria-controls="pills-work" aria-selected="true">일감</a>
+		    </li>
+            <li class="nav-item">
+                <a class="nav-link" id="line-gantt-tab" href="${pageContext.request.contextPath}/${companyNo}/ganttcharttask" role="tab" aria-controls="pills-gantt" aria-selected="true">간트차트</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="line-calendar-tab" href="${pageContext.request.contextPath}/${companyNo}/calendertask" role="tab" aria-controls="pills-calendar" aria-selected="true">캘린더</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="biggestContainer">
+    <div class="buttonspart">
+        <h1>프로젝트</h1>
+        <a href="${pageContext.request.contextPath}/${companyNo}/project/new" class="btn btn-success">프로젝트 생성</a>
+        <div class="input-icon">
+            <input type="text" class="form-control" placeholder="프로젝트명 검색..." />
+            <span class="input-icon-addon">
+                <i class="fa fa-search"></i>
+            </span>
+        </div>
+    </div>
+</div>
+
+        <nav class="tabs">
+            <ul class="tabs-menu">
+                <li><a href="#" onclick="filterProjects('all')">내 프로젝트 : </a></li>
+                <li><a href="#" onclick="filterProjects('진행중')">진행중</a></li>
+                <li><a href="#" onclick="filterProjects('종료')">종료</a></li>
+            </ul>
+        </nav>
+
+        <main class="project-container">
+            <table class="table table-striped mt-3" id="projectTable">
+                <thead>
+                    <tr>
+                        <th scope="col"><input type="radio" name="project" value="1"></th>
+                        <th scope="col">번호</th>
+                        <th scope="col">아이디</th>
+                        <th scope="col">제목</th>
+                        <th scope="col">시작일</th>
+                        <th scope="col">종료일</th>
+                        <th scope="col">상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="project" items="${projects}">
+                        <tr>
+                            <td><input type="radio" name="project" value="${project.projectNo}"></td>
+                            <td>${project.projectNo}</td>
+                            <td>${project.empId}</td>
+                            <td>
+							    <a href="${pageContext.request.contextPath}/${companyNo}/project/${project.projectNo}">
+							        ${project.projectTitle}
+							    </a>
+							</td>
+                            <td>
+                                <fmt:formatDate value="${project.projectStartTime}" pattern="yyyy-MM-dd" />
+                            </td>
+                            <td>
+                                <fmt:formatDate value="${project.projectEndTime}" pattern="yyyy-MM-dd" />
+                            </td>
+                            <td>${project.projectStatus}</td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+
+            <div class="pagination">
+                <ul class="pagination pg-primary">
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    <li class="page-item active">
+                        <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </main>
+
+    <script src="${pageContext.request.contextPath }/resources/groupware/js/jquery-3.7.1.min.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/groupware/js/common.js"></script>
+    <script src="${pageContext.request.contextPath }/resources/groupware/js/project/projectList.js"></script>
+</body>
+    
+    

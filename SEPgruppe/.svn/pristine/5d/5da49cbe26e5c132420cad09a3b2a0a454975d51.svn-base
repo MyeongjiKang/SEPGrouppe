@@ -1,0 +1,87 @@
+/** 
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ * 2025. 3. 21.     	JSW            최초 생성
+ *
+ * </pre>
+ */
+function showOrganizationPopup() {
+  console.log("✅ showOrganizationPopup 호출됨");
+  const popup = document.getElementById('organizationPopup');
+  popup.style.display = 'block';
+  loadOrganizationTree();
+}
+
+function closeOrganizationPopup() {
+  console.log("🚪 closeOrganizationPopup 호출됨");
+  document.getElementById('organizationPopup').style.display = 'none';
+}
+
+// 팝업 바깥 영역 클릭 시 닫기
+window.addEventListener('click', function (e) {
+  const popup = document.getElementById('organizationPopup');
+  if (e.target === popup) {
+    closeOrganizationPopup();
+  }
+});
+
+
+function loadOrganizationTree() {
+  fetch(contextPath + "/" + companyNo + "/organization/parentDep")
+    .then(res => res.json())
+    .then(data => {
+      const organizationTree = document.getElementById('organizationTree');
+      organizationTree.innerHTML = '';
+      const tree = document.createElement('ul');
+      data.forEach(dept => {
+        const node = createDepartmentNode(dept, companyNo);
+        tree.appendChild(node);
+      });
+      organizationTree.appendChild(tree);
+    });
+}
+
+function createDepartmentNode(dept, companyNo) {
+  const li = document.createElement('li');
+  li.textContent = dept.title; // DepartmentNode의 title
+
+  li.addEventListener('click', function (e) {
+    e.stopPropagation(); // 이벤트 버블링 방지
+
+    // 이미 열려있으면 토글
+    if (li.querySelector('ul')) {
+      li.removeChild(li.querySelector('ul'));
+      return;
+    }
+
+    // 하위 부서와 직원 불러오기
+    fetch(contextPath + "/" + companyNo + `/organization/childeDep?mode=dept&parent=${dept.key}`)
+      .then(res => res.json())
+      .then(children => {
+        const ul = document.createElement('ul');
+
+        // 하위 부서
+        children.forEach(child => {
+          ul.appendChild(createDepartmentNode(child, companyNo));
+        });
+
+        // 부서 내 직원
+        fetch(contextPath + "/" + companyNo +`/organization/childeDep?mode=employee&parent=${dept.key}`)
+          .then(res => res.json())
+          .then(employees => {
+            employees.forEach(emp => {
+              const empLi = document.createElement('li');
+              empLi.textContent = emp.title; // EmployeeNode의 title
+              ul.appendChild(empLi);
+            });
+          });
+
+        li.appendChild(ul);
+      });
+  });
+
+  return li;
+}

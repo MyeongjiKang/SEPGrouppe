@@ -1,0 +1,87 @@
+/** 
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ * 2025. 3. 27.     	KMJ            최초 생성
+ *
+ * </pre>
+ */
+
+
+
+
+
+function showNav(event) {
+    const navbar = document.getElementById('myNavbar');
+    if (navbar.style.display === 'none' || navbar.style.display === '') {
+        navbar.style.display = 'block';
+        navbar.style.left = event.currentTarget.offsetLeft + event.currentTarget.offsetWidth + 'px';
+        navbar.style.top = event.currentTarget.offsetTop + 'px';
+    } else {
+        navbar.style.display = 'none';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const navTriggers = document.querySelectorAll('.nav-trigger');
+    navTriggers.forEach(trigger => {
+        trigger.addEventListener('click', showNav);
+    });
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    let uploadBtn = document.querySelector("#pills-home-tab-icon");
+    let fileInput = document.querySelector("#fileInput");
+
+    // 요소가 존재하는지 확인 후 이벤트 바인딩
+    if (uploadBtn) {
+        uploadBtn.addEventListener("click", function () {
+            if (fileInput) {
+                fileInput.click();
+            } else {
+                console.error("파일 입력 요소(#fileInput)를 찾을 수 없습니다.");
+            }
+        });
+    } else {
+        console.error("파일 업로드 버튼(#pills-home-tab-icon)을 찾을 수 없습니다.");
+    }
+
+    // 파일 선택 후 업로드 실행
+    if (fileInput) {
+        fileInput.addEventListener("change", function () {
+            uploadFile();
+        });
+    }
+});
+
+function uploadFile() {
+    let fileInput = document.querySelector("#fileInput");
+    if (!fileInput || fileInput.files.length === 0) {
+        alert("파일을 선택해주세요.");
+        return;
+    }
+
+    let file = fileInput.files[0];
+    let formData = new FormData();
+    formData.append("file", file);
+    formData.append("empId", empId); // 로그인된 empId를 동적으로 설정해야 함
+	
+//	const contextPath = "/" + window.location.pathname.split("/")[1]; 
+
+    fetch(contextPath + "/" + companyNo + "/webhard/new", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        alert("업로드 성공");
+        location.reload(); // 업로드 후 파일 목록 갱신
+    })
+    .catch(error => {
+        console.error("업로드 실패:", error);
+        alert("파일 업로드에 실패했습니다.");
+    });
+}

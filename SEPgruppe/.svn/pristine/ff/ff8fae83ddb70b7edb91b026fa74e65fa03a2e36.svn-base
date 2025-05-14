@@ -1,0 +1,13 @@
+package kr.or.ddit.works.mybatis.mappers;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import kr.or.ddit.works.login.vo.AllUserVO;
+
+@Mapper
+public interface LoginMapper {
+
+	public AllUserVO login(@Param("userId") String userId);
+	
+}

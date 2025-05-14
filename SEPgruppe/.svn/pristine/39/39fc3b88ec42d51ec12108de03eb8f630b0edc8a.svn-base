@@ -1,0 +1,81 @@
+package kr.or.ddit.works.organization.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import kr.or.ddit.security.RealUserWrapper;
+import kr.or.ddit.works.login.vo.AllUserVO;
+import kr.or.ddit.works.organization.service.AnnualLeaveService;
+import kr.or.ddit.works.organization.vo.AnnualLeaveVO;
+import kr.or.ddit.works.organization.vo.EmployeeVO;
+
+/**
+ * 
+ * @author JSW
+ * @since 2025. 3. 19.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 19.     	JSW	          최초 생성
+ *
+ * </pre>
+ */
+@Controller
+@RequestMapping("{companyNo}/annual")
+public class AnnualLeaveController {
+	
+	@Autowired
+	private AnnualLeaveService service;
+	
+	@GetMapping
+	public String selectListAllAnnual(@PathVariable("companyNo") String companyNo) {
+		return "gw:annual/annualList";
+	}
+	
+	@GetMapping("/myannual")
+	public String selectMyAnnual(
+			@PathVariable("companyNo") String companyNo
+			, Model model
+			) {
+		 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        Object principal = authentication.getPrincipal();
+
+	        String empId = null;
+	        String empNm = null;
+
+	        if (principal instanceof RealUserWrapper) {
+	            RealUserWrapper user = (RealUserWrapper) principal;
+	            AllUserVO allUser = user.getRealUser();
+
+	            if (allUser instanceof EmployeeVO) {
+	                EmployeeVO employee = (EmployeeVO) allUser;
+	                empId = employee.getEmpId(); // 로그인한 사원의 empId 가져오기
+	                empNm = employee.getEmpNm();
+	                
+	            }
+	        }
+
+	        if (empId == null) {
+	            return "redirect:/login"; // 로그인되지 않은 경우 로그인 페이지로 이동
+	        }
+		List<AnnualLeaveVO> annualList = service.selectAnnual(empId);
+		
+		model.addAttribute("annualList", annualList);
+		model.addAttribute("companyNo", companyNo);
+		model.addAttribute("empId", empId);
+		model.addAttribute("empNm", empNm);
+		return "gw:annual/myAnnual";
+	}
+}

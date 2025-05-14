@@ -1,0 +1,38 @@
+package kr.or.ddit.works.reservation.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * 예약 관리 컨트롤러
+ * 
+ * @author JYS
+ * @since 2025. 3. 13.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 13.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+@Controller
+//@RequestMapping("/{companyNo}/reservation")
+@RequestMapping("/a001/reservation")
+public class ReservationController {
+	
+	// 예약 조회 (각 회사별 회의실 조회, 회의실 별 예약조회)
+	@GetMapping("")
+//	public String selectListAllReservation(@PathVariable("companyNo") String companyNo) {
+//		return "gw:reservation/reservationList";
+//	}
+	public String selectListAllReservation() {
+		return "gw:reservation/reservationList";
+	}
+//	@GetMapping("")
+	
+}

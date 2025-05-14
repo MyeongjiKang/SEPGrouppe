@@ -1,0 +1,27 @@
+/** 
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ * 2025. 3. 14.     	손현진            최초 생성
+ * 2025. 3. 14.			손현진			테스트계정 자동 로그인
+ *
+ * </pre>
+ */
+
+document.getElementById("testAccountSelect").addEventListener("change", function() {
+	const selectedValue = this.value;
+	if (selectedValue) {
+		const [userId, userPw] = selectedValue.split("|");
+		document.getElementById("floatingID").value = userId;
+		document.getElementById("floatingPassword").value = userPw;
+
+		setTimeout(() => {
+			document.getElementById("loginForm").submit();
+		}, 500);
+	} else {
+		document.getElementById("floatingID").value = "";
+		document.getElementById("floatingPassword").value = "";
+	}
+});

@@ -1,0 +1,44 @@
+<!-- 
+ * 자동결재선 추가 폼
+ * == 개정이력(Modification Information) ==
+ *   
+ *   수정일      			수정자           수정내용
+ *  ============   	============== =======================
+ *  2025. 3. 28.     	JYS            최초 생성
+ *
+-->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<div>
+	<table class="table">
+		<tr>
+			<th>자동결재선 명</th>
+			<td><input type="text"/></td>
+		</tr>
+	</table>
+</div>
+
+<br><br>
+
+<div>
+	<span>결재선 설정</span>
+	<hr>
+	<button onclick="add()">결재자 추가</button>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>순서</th>
+				<th>타입</th>
+				<th>항목</th>
+				<th>삭제</th>
+			</tr>
+		</thead>
+		<tbody id="">
+		
+		</tbody>
+	</table>
+</div>
+
+<script />

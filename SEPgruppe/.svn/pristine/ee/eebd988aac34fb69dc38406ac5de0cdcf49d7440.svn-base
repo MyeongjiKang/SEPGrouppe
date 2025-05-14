@@ -1,0 +1,16 @@
+/** 
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 20.     	JYS            최초 생성
+ *
+ * </pre>
+ */
+@charset "UTF-8";
+.scrollable-list {
+    max-height: 300px; /* 최대 높이 지정 */
+    overflow-y: auto;  /* 세로 스크롤 활성화 */
+    overflow-x: hidden; /* 가로 스크롤 숨김 */
+}

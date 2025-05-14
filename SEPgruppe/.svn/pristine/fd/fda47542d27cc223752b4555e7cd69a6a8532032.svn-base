@@ -1,0 +1,145 @@
+package kr.or.ddit.works.organization.controller;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import kr.or.ddit.security.RealUserWrapper;
+import kr.or.ddit.works.login.vo.AllUserVO;
+import kr.or.ddit.works.organization.service.DclzStatusService;
+import kr.or.ddit.works.organization.vo.DclzStatusVO;
+import kr.or.ddit.works.organization.vo.EmployeeVO;
+
+/**
+ * 근태관리 컨트롤러
+ * 
+ * @author JYS
+ * @since 2025. 3. 12.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 12.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+@Controller
+@RequestMapping("{companyNo}/dclz")
+public class DclzController {
+	
+	@Autowired
+	private DclzStatusService service;
+	
+	/** 관리자 - 전사 근태 관리 목록 조회 */
+//    @GetMapping("")
+//    public String selectListAllDclz(@PathVariable("companyNo") String companyNo) {
+//        return "gw:dclz/dclzList";
+//    }
+	@GetMapping("/")
+	public String selectListAllDclz() {
+		return "gw:dclz/dclzList";
+	}
+
+    /** 관리자 - 사원 별 근태 관리 조회 */
+    @GetMapping("/{empNo}")
+    public String selectDclz(@PathVariable("companyNo") String companyNo, 
+                             @PathVariable("empNo") String empNo) {
+        return "gw:dclz/dclzDetail";
+    }
+
+    /** 일반 사원 - 내 근태 관리 조회 */
+//    @GetMapping("/mydclz")
+//    public String selectMyDclz(@PathVariable("companyNo") String companyNo) {
+//        return "gw:dclz/myDclz";
+//    }
+    @GetMapping("/mydclz")
+    public String selectMyDclz(@PathVariable("companyNo") String companyNo, Model model) {
+        // 로그인한 사용자 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        String empId = null;
+
+        if (principal instanceof RealUserWrapper) {
+            RealUserWrapper user = (RealUserWrapper) principal;
+            AllUserVO allUser = user.getRealUser();
+
+            if (allUser instanceof EmployeeVO) {
+                EmployeeVO employee = (EmployeeVO) allUser;
+                empId = employee.getEmpId(); // 로그인한 사원의 empId 가져오기
+            }
+        }
+
+        if (empId == null) {
+            return "redirect:/login"; // 로그인되지 않은 경우 로그인 페이지로 이동
+        }
+
+        // 오늘 날짜를 기준으로 데이터를 조회
+        List<DclzStatusVO> dclzStatusList = service.selectDclzStatus(empId);
+        DclzStatusVO todayDclzStatus = service.selectTodayDclzStatus(empId);
+        
+        // 주차별로 그룹화
+        Map<Integer, List<DclzStatusVO>> weeklyMap = new HashMap<>();
+        for (DclzStatusVO status : dclzStatusList) {
+            int weekOfYear = status.getWeekOfMonth();
+            weeklyMap.computeIfAbsent(weekOfYear, k -> new ArrayList<>()).add(status);
+        }
+        
+        model.addAttribute("companyNo", companyNo);
+        model.addAttribute("weeklyMap", weeklyMap); // 주차별 근태 정보
+        model.addAttribute("dclzStatusList", dclzStatusList); // 전체 근태 리스트
+        model.addAttribute("todayDclzStatus", todayDclzStatus); // 오늘의 근태 상태
+        model.addAttribute("empId", empId); // 로그인한 사원의 empId
+
+        return "gw:dclz/myDclz";
+    }
+   
+    // 출근 체크 
+    @PostMapping("/{empId}/check-in")
+    @ResponseBody
+    public DclzStatusVO checkIn(@PathVariable("companyNo") String companyNo, 
+                                @PathVariable("empId") String empId) {
+        service.insertCheckIn(empId);
+        return service.selectTodayDclzStatus(empId);
+    }
+
+    // 퇴근 체크 
+    @PutMapping("/{empId}/check-out")
+    @ResponseBody
+    public DclzStatusVO checkOut(@PathVariable("companyNo") String companyNo, 
+                                 @PathVariable("empId") String empId) {
+        service.updateCheckOut(empId);
+        return service.selectTodayDclzStatus(empId);
+    }
+    
+    @GetMapping("/{empId}/attendance-status")
+    @ResponseBody
+    public Map<String, Boolean> getAttendanceStatus(@PathVariable("companyNo") String companyNo,
+                                                   @PathVariable("empId") String empId) {
+        DclzStatusVO todayStatus = service.selectTodayDclzStatus(empId);
+        Map<String, Boolean> statusMap = new HashMap<>();
+        statusMap.put("isCheckedIn", todayStatus != null && todayStatus.getAttendDate() != null);
+        statusMap.put("isCheckedOut", todayStatus != null && todayStatus.getLvffcDate() != null);
+        return statusMap;
+    }
+
+    
+}

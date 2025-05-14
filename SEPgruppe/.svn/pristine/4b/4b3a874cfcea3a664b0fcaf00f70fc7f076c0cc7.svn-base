@@ -1,0 +1,109 @@
+package kr.or.ddit;
+
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import kr.or.ddit.security.CustomUserDetailService;
+import kr.or.ddit.security.RealUserWrapper;
+import kr.or.ddit.works.company.vo.CompaniesVO;
+import kr.or.ddit.works.mybatis.mappers.LoginMapper;
+
+
+
+
+/**
+ * 
+ * @author 손현진
+ * @since 2025. 3. 17.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 17.     	손현진	        최초 생성 누구냐
+ *  2025. 3. 17.		손현진			고객사 관리자계정 그룹웨어 연동
+ *
+ * </pre>
+ */
+@Controller
+public class IndexController{
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
+	
+	@Autowired
+	private CustomUserDetailService userDetailsService;
+	
+	@Autowired
+	private LoginMapper mapper;
+	
+	@GetMapping("/")
+	public String index(HttpSession session, Model model, Authentication authentication){
+		
+		if (authentication == null || !authentication.isAuthenticated()) {
+	        return "sep:indexSep";
+	    }
+		
+		boolean isAdmin = authentication.getAuthorities().stream()
+	            .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+		
+		if(isAdmin) {
+			CompaniesVO admin = mapper.autoLogin(authentication.getName());
+			String loginId = admin.getContactId();
+			autoLogin(loginId);
+		}
+		// 관리자모드 진입 -> 홈 버튼 눌렀을때 상단 메뉴바 동적 변경을 위한 isAdmin 세션 삭제
+		session.removeAttribute("isAdmin");
+		return "sep:indexSep";
+	}
+	
+
+	@GetMapping("/{companyNo}/groupware")
+	public String index2(
+		@PathVariable String companyNo, Model model, Authentication authentication
+		
+	){
+		model.addAttribute("companyNo", companyNo);
+		Object principal = authentication.getPrincipal();
+		
+		if (principal instanceof RealUserWrapper) { 
+	        RealUserWrapper wrapper = (RealUserWrapper) principal;
+	        Object realUser = wrapper.getRealUser();
+
+	        if (realUser instanceof CompaniesVO) { 
+	        	CompaniesVO user = (CompaniesVO) realUser;
+	            String adminId = user.getAdminId();
+	            if (adminId != null) {
+	                autoLogin(adminId);
+	            }
+	        }
+		}
+		return "gw:indexGW";
+	}
+	
+	private void autoLogin(String loginId) {
+	    UserDetails userDetails = userDetailsService.loadUserByUsername(loginId);
+
+	    UsernamePasswordAuthenticationToken authToken =
+	        new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+
+	    SecurityContextHolder.getContext().setAuthentication(authToken);
+	}
+}

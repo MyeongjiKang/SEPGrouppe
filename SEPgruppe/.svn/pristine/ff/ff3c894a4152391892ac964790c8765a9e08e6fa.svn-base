@@ -1,0 +1,74 @@
+package kr.or.ddit.works.notice.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import kr.or.ddit.paging.PaginationInfo;
+import kr.or.ddit.paging.SimpleCondition;
+import kr.or.ddit.works.mybatis.mappers.NoticeMapper;
+import kr.or.ddit.works.notice.vo.NoticeVO;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+public class NoticeServiceImpl implements NoticeService {
+
+	@Autowired
+	private NoticeMapper mapper;
+
+	/**
+	 * 공지사항 전체 조회
+	 * @param paging
+	 * @return
+	 */
+	@Override
+	public List<NoticeVO> selectAllNotice(PaginationInfo<NoticeVO> paging) {
+		return mapper.selectAllNotice(paging);
+	}
+
+	/**
+	 * 페이징 처리를 위한 전체 레코드수 조회
+	 * @return
+	 */
+	@Override
+	public int selectAllNoticeTotalRecord(PaginationInfo<NoticeVO> paging) {
+		return mapper.selectAllNoticeTotalRecord(paging);
+	}
+
+	/**
+	 * 공지사항 등록
+	 * @param notice
+	 * @return
+	 */
+	@Override
+	public boolean insertNotice(NoticeVO notice) {
+		return mapper.insertNotice(notice) > 0;
+	}
+
+	/**
+	 * 임시저장 글 불러오기
+	 * @param empId
+	 * @return
+	 */
+	@Override
+	public List<NoticeVO> isDraftList(String empId) {
+		return mapper.isDraftList(empId);
+	}
+
+	/**
+	 * 임시저장 글 개수 가져오기
+	 * @param empId
+	 * @return
+	 */
+	@Override
+	public int isDraftCnt(String empId) {
+		return mapper.isDraftCnt(empId);
+	}
+
+
+}

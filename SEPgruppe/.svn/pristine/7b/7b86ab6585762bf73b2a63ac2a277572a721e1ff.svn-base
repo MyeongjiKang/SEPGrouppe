@@ -1,0 +1,14 @@
+package kr.or.ddit.works.reservation.service;
+
+import java.util.List;
+
+import kr.or.ddit.paging.PaginationInfo;
+import kr.or.ddit.works.reservation.vo.ReservationVO;
+
+public interface ReservationService {
+	public List<ReservationVO> selectListAllReservation(PaginationInfo<ReservationVO> paging);
+	public ReservationVO selectDetailReservation(Long reservationNo);
+	public boolean insertReservation(ReservationVO Reservation);
+	public boolean updateReservation(ReservationVO Reservation);
+	public boolean deleteReservation(Long reservationNo);
+}

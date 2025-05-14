@@ -1,0 +1,176 @@
+<!--
+ * == 개정이력(Modification Information) ==
+ *
+ *   수정일      			수정자           수정내용
+ *  ============   	============== =======================
+ *  2025. 3. 13.     	JYS            최초 생성
+ *
+-->
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<security:authentication property="principal.realUser" var="realUser"/> <!-- Provider 시큐리티 정보 -->
+
+ <h1>리얼유저 ${realUser}</h1>
+ <h1>관리자 인사정보 수정 폼</h1>
+<%-- <h1>멤버 ${member }</h1> --%>
+
+
+
+<section class="section-padding profile">
+    <div class="row">
+        <div class="col-xl-4">
+            <div class="card">
+                <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                    <!-- 프로필 이미지가 없을 경우 기본 이미지 -->
+<%--                     <c:if test="${empty realUser.empImg }"> --%>
+<%--                         <img src="${pageContext.request.contextPath}/resources/groupware/images/profile.png" class="rounded-circle"> --%>
+<%--                     </c:if> --%>
+                    <!-- 프로필 이미지 -->
+                    <spring:eval expression="@fileInfo.attachFiles" var="attachFiles"/>
+                    <img src="<c:url value='${attachFiles }${realUser.empImg}'/>" class="rounded-circle">
+                    <h2>${realUser.empNm }</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-8">
+            <div class="card">
+                <div class="card-body pt-3">
+                    <!-- 사용자정보, 정보변경 탭 -->
+                    <ul class="nav justify-content-start nav-tabs nav-tabs-bordered" id="mypageBtn">
+                        <li class="nav-item">
+                            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">사용자정보</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">정보변경</button>
+                        </li>
+                    </ul>
+
+                    <!-- 사용자정보 -->
+                    <div class="tab-content pt-2">
+                        <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Name</div>
+                                <div class="col-lg-9 col-md-8">${realUser.empNm }</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">ID</div>
+                                <div class="col-lg-9 col-md-8">${realUser.empId }</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">사원번호</div>
+                                <div class="col-lg-9 col-md-8">${realUser.empNo }</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">주소</div>
+                                <div class="col-lg-9 col-md-8">${realUser.empAdd1 }</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">상세주소</div>
+                                <div class="col-lg-9 col-md-8">${realUser.empAdd2 }</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">이메일주소</div>
+                                <div class="col-lg-9 col-md-8">${realUser.empEmail }</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">휴대폰번호</div>
+                                <div class="col-lg-9 col-md-8">${realUser.empPhone }</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-4 label">입사년도</div>
+                                <div class="col-lg-9 col-md-8">${realUser.empRegdate }</div>
+                            </div>
+                        </div>
+
+                        <!-- 정보변경 탭 -->
+                        <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+                            <form action="/sep/a001/employee/${realUser.companyNo}/edit" method="post" enctype="multipart/form-data">
+                                <div class="row mb-3">
+                                    <label for="fileGroupNo" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+                                    <div class="col-md-8 col-lg-9">
+<%--                                         <c:if test="${empty realUser.empImg }"> --%>
+<%--                                             <img src="${pageContext.request.contextPath}/resources/groupware/images/profile.png"> --%>
+<%--                                         </c:if> --%>
+                                        <spring:eval expression="@fileInfo.attachFiles" var="attachFiles"/>
+                                        <img src="<c:url value='${attachFiles }${realUser.empImg}'/>">
+                                        <div class="pt-2">
+                                        	<input name="attachFile" type="file" class="btn btn-primary btn-sm form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="empId" class="col-md-4 col-lg-3 col-form-label">아이디</label>
+                                    <div class="col-md-8 col-lg-9">
+                                    	<div>${realUser.empId }</div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="empNm" class="col-md-4 col-lg-3 col-form-label">Name</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        <div>${realUser.empNm}</div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="prodQtysale" class="col-md-4 col-lg-3 col-form-label">Password</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        <input name="empPw" type="password" class="form-control" value="${realUser.empPw }"/>
+                                        <form:errors path="prodQtysale" class="text-danger" element="span" />
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="empZip" class="col-md-4 col-lg-3 col-form-label">우편번호</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        <input name="empZip" type="text" class="form-control" value="${realUser.empZip }">
+                                        <form:errors path="empZip" class="text-danger" element="span" />
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="empAdd1" class="col-md-4 col-lg-3 col-form-label">주소</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        <input name="empAdd1" type="text" class="form-control" value="${realUser.empAdd1 }">
+                                        <form:errors path="empAdd1" class="text-danger" element="span" />
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="empAdd2" class="col-md-4 col-lg-3 col-form-label">상세주소</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        <input name="empAdd2" type="text" class="form-control" value="${realUser.empAdd2 }">
+                                        <form:errors path="empAdd2" class="text-danger" element="span" />
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="empEmail" class="col-md-4 col-lg-3 col-form-label">이메일</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        <input name="empEmail" type="text" class="form-control" value="${realUser.empEmail }">
+                                        <form:errors path="empEmail" class="text-danger" element="span" />
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="empPhone" class="col-md-4 col-lg-3 col-form-label">휴대폰번호</label>
+                                    <div class="col-md-8 col-lg-9">
+                                        <input name="empPhone" type="text" class="form-control" value="${realUser.empPhone }">
+                                        <form:errors path="empPhone" class="text-danger" element="span" />
+                                    </div>
+                                </div>
+
+                                <div class="d-grid gap-2 col-1 mx-auto">
+                                    <button type="submit" class="button" id="btn">변경</button>
+                                </div>
+                            </form><!-- End Profile Edit Form -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,21 @@
+package kr.or.ddit.works.organization.service;
+
+import kr.or.ddit.works.organization.vo.EmployeeVO;
+
+public interface EmployeeService {
+
+	/**
+	 * 마이페이지 정보 수정
+	 * @param companyNo 로그인된 고객사번호
+	 * @return
+	 */
+	public boolean updateCompany(EmployeeVO member);
+
+	/**
+	 * 회원정보 조회
+	 * @param empId
+	 * @return
+	 */
+	public EmployeeVO selectCompany(String empId);
+
+}

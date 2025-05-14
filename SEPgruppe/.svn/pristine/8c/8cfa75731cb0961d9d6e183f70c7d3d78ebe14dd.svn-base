@@ -1,0 +1,112 @@
+/**	
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ * 2025. 3. 15.     	KMJ            최초 생성
+ *
+ * </pre>
+ */
+
+// 현재 날짜 및 시간 표시
+function updateTime() {
+    const now = new Date();
+	const date = now.getFullYear() + '-' + (now.getMonth() + 1).toString().padStart(2, '0') + '-' + now.getDate().toString().padStart(2, '0');
+    const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0') + ':' + now.getSeconds().toString().padStart(2, '0');
+		
+    document.getElementById("current-date").textContent = date;
+    document.getElementById("current-time").textContent = time;
+}
+
+// 매 초마다 시간 업데이트
+setInterval(updateTime, 1000);
+updateTime();
+
+
+$(document).ready(function () {
+	checkAttendanceStatus();
+	
+    // 출근 버튼 클릭 이벤트
+    $("#start").click(function () {
+		$(this).prop("disabled", true); // 출근 완료 후 버튼 비활성화
+        $.ajax({
+            url: contextPath + "/" + companyNo + "/dclz/" + empId + "/check-in",
+            type: "POST",
+            success: function (data) {
+				if (data.todayDclzStatus.attendDate) {
+	                $(".clock-in").text(data.todayDclzStatus.attendDate);
+	            }
+	            if (data.weeklyTotalHours === getCurrentWeekNumber()) { // ✅ 주간 근무시간 즉시 업데이트
+	                $("#weekly-time").text(data.weeklyTotalHours);
+	            }
+	            disableButtonsUntilNextDay();
+	        },
+	        error: function (xhr, status, error) {
+	            console.error("출근 요청 실패:", error);
+	        }
+	    });
+    });
+
+    // 퇴근 버튼 클릭 이벤트
+    $("#end").click(function () {
+		$(this).prop("disabled", true); // 출근 완료 후 버튼 비활성화
+        $.ajax({
+            url: contextPath + "/" + companyNo + "/dclz/" + empId + "/check-out",
+            type: "PUT",
+            success: function (data) {
+				if (data.todayDclzStatus.lvffcDate) {
+	                $(".clock-out").text(data.todayDclzStatus.lvffcDate);
+	            }
+	            if (data.weeklyTotalHours === getCurrentWeekNumber()) { // ✅ 주간 근무시간 즉시 업데이트
+	                $("#weekly-time").text(data.weeklyTotalHours);
+	            }
+	            disableButtonsUntilNextDay();
+	        },
+	        error: function (xhr, status, error) {
+	            console.error("퇴근 요청 실패:", error);
+	        }
+	    });
+    });
+		// 출근/퇴근 상태 확인 
+	    function checkAttendanceStatus() {
+	        $.ajax({
+	            url: contextPath + "/" + companyNo + "/dclz/" + empId + "/attendance-status",
+	            type: "GET",
+	            success: function (data) {
+	                if (data.isCheckedIn) {
+	                    $("#start").prop("disabled", true); // 출근 버튼 비활성화
+	                    if (!data.isCheckedOut) {
+	                        $("#end").prop("disabled", false); // 퇴근 버튼 활성화
+	                    }
+	                }
+	                if (data.isCheckedOut) {
+	                    $("#end").prop("disabled", true); // 퇴근 버튼 비활성화
+	                }
+	            },
+	            error: function (xhr, status, error) {
+	                console.error("출근/퇴근 상태 확인 실패:", error);
+	            }
+	        });
+	    }
+
+	    // 하루 지나면 버튼을 다시 활성화시키는 함수
+	    function disableButtonsUntilNextDay() {
+			const now = new Date();
+		    const tomorrow = new Date(now);
+		    tomorrow.setDate(now.getDate() + 1);
+		    tomorrow.setHours(0, 0, 0, 0); // 다음 날 자정으로 설정
+		
+			const timeUntilTomorrow = tomorrow - now;
+		    setTimeout(function () {
+		        checkAttendanceStatus(); // 다음 날 자정에 버튼 상태 확인
+		    }, timeUntilTomorrow);
+		}
+		
+		function getCurrentWeekNumber() {
+		    const now = new Date();
+		    const firstDayOfYear = new Date(now.getFullYear(), 0, 1);
+		    const pastDaysOfYear = (now - firstDayOfYear) / 86400000;
+		    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+		}
+});

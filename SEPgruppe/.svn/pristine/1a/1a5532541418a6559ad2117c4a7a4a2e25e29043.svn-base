@@ -1,0 +1,214 @@
+package kr.or.ddit.works.reservation.controller;
+
+import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import kr.or.ddit.security.RealUserWrapper;
+import kr.or.ddit.works.reservation.service.ReservationService;
+import kr.or.ddit.works.reservation.vo.MeetingRoomVO;
+import kr.or.ddit.works.reservation.vo.ReservationVO;
+
+/**
+ * 회의실 컨트롤러
+ * @author JYS
+ * @since 2025. 3. 15.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 15.     	JYS	          최초 생성
+ *  2025. 3. 17.  		KKM  		  개발 중
+ *
+ * </pre>
+ */
+@Controller
+@RequestMapping("/{companyNo}/reservation")
+public class ReservationController {
+
+    @Autowired
+    private ReservationService reservationService;
+
+    // 전체 예약 목록 및 오늘의 예약 현황 조회
+    @GetMapping("/reservations")
+    public String selectListAllReservation(@PathVariable("companyNo") String companyNo, Model model, HttpSession session) {
+        String empId = (String) session.getAttribute("loggedInEmpId"); // 세션에서 로그인한 사원 ID 가져오기
+        model.addAttribute("companyNo", companyNo); // companyNo 추가
+        model.addAttribute("empId", empId); // 사원 ID를 모델에 추가
+        LocalDate today = LocalDate.now();
+        List<ReservationVO> todayReservations = reservationService.selectReservationsByDate(today);
+        model.addAttribute("todayReservations", todayReservations); // 오늘의 예약 현황 추가
+
+        return "gw:reservation/reservationList"; // JSP 경로
+    }
+
+ // 예약 상세 조회
+    @GetMapping("/{reservationNo}")
+    public String selectReservationDetail(@PathVariable("reservationNo") String reservationNo, 
+                                          @PathVariable("companyNo") String companyNo, 
+                                          Model model) {
+        ReservationVO reservation = reservationService.selectReservationDetail(reservationNo);
+        model.addAttribute("reservation", reservation);
+        model.addAttribute("companyNo", companyNo);
+        return "gw:reservation/reservationDetail"; // 예약 상세 페이지
+    }
+
+ // 예약 등록 폼 UI (AJAX 요청에 대한 HTML 반환)
+    @GetMapping("/new")
+    public String insertReservationFormUI(
+            @PathVariable String companyNo,
+            @RequestParam(required = false) Long roomNo,
+            @RequestParam String time,
+            @RequestParam String date,
+            Model model) {
+
+        if (roomNo == null) {
+            throw new IllegalArgumentException("roomNo 값이 누락되었습니다.");
+        }
+
+        model.addAttribute("roomNo", roomNo);
+        model.addAttribute("time", time);
+        model.addAttribute("date", date);
+        model.addAttribute("companyNo", companyNo);
+
+        return "gw:reservation/reservationForm :: content";
+    }
+
+    // 예약 등록 처리
+    @PostMapping("/new")
+    public String insertReservation(ReservationVO reservation, 
+            @PathVariable("companyNo") String companyNo, 
+            Model model) {
+			try {
+			if (reservationService.insertReservation(reservation)) {
+			model.addAttribute("success", true);
+			} else {
+			model.addAttribute("error", "예약이 충돌했습니다.");
+			}
+			} catch (Exception e) {
+			model.addAttribute("error", "예약 등록 중 오류가 발생했습니다.");
+			}
+			return "gw:reservation/reservationForm :: content";
+			}
+
+    // 수정 폼 UI
+    @GetMapping("/reservations/{reservationNo}/edit")
+    public String updateReservationFormUI(@PathVariable("reservationNo") String reservationNo, 
+                                          @PathVariable("companyNo") String companyNo, 
+                                          Model model) {
+        ReservationVO reservation = reservationService.selectReservationDetail(reservationNo);
+        model.addAttribute("reservation", reservation);
+        model.addAttribute("companyNo", companyNo); // companyNo 추가
+        return "gw:reservation/editReservation"; // 예약 수정 페이지
+    }
+
+    // 예약 수정
+    @PostMapping("/reservations/{reservationNo}/edit")
+    public String updateReservation(ReservationVO reservation, 
+                                    @PathVariable("companyNo") String companyNo) {
+        reservationService.updateReservation(reservation);
+        return "redirect:/" + companyNo + "/reservation/reservations"; // 수정 후 예약 목록 페이지로 리다이렉트
+    }
+
+ // 예약 취소 (DELETE 요청 처리)
+    @DeleteMapping("/{reservationNo}/delete")
+    public String deleteReservation(@PathVariable("reservationNo") String reservationNo, 
+                                    @PathVariable("companyNo") String companyNo) {
+        reservationService.deleteReservation(reservationNo);
+        // 예약 목록 페이지로 리다이렉트
+        return "redirect:/" + companyNo + "/reservation"; // companyNo와 함께 예약 목록으로 리다이렉트
+    }
+
+    // 예약 취소 (POST 요청을 DELETE로 변환)
+    @PostMapping("/{reservationNo}/delete")
+    public String deleteReservationViaPost(@PathVariable("reservationNo") String reservationNo, 
+                                           @PathVariable("companyNo") String companyNo) {
+        return deleteReservation(reservationNo, companyNo);
+    }
+    
+ // 특정 날짜의 예약 현황 조회 (Grouped)
+    @GetMapping("")
+    public String getReservations(
+            @PathVariable("companyNo") String companyNo,
+            @RequestParam(value = "date", defaultValue = "today") String date,
+            Principal principal,
+            Model model) {
+        
+        // 로그인한 사용자의 ID 가져오기
+        String empId = principal.getName();
+        
+        // 예약 내역 조회
+        List<ReservationVO> myReservations = reservationService.getMyReservationsByEmpId(empId);
+        model.addAttribute("myReservations", myReservations);
+        
+        // 날짜 파싱
+        LocalDate reservationDate;
+        if ("today".equalsIgnoreCase(date)) {
+            reservationDate = LocalDate.now(); // 오늘 날짜
+        } else {
+            try {
+                reservationDate = LocalDate.parse(date); // String을 LocalDate로 변환
+            } catch (Exception e) {
+                reservationDate = LocalDate.now(); // 기본값으로 오늘 날짜 설정
+            }
+        }
+
+        // 날짜 형식 지정
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String currentDate = reservationDate.format(formatter);
+
+        // 모든 회의실 정보 조회
+        List<MeetingRoomVO> allRooms = reservationService.selectListAllRoom();
+
+        // 특정 날짜의 예약 데이터 조회
+        List<ReservationVO> reservations = reservationService.selectReservationsByDate(reservationDate);
+        
+        // 데이터 가공: 모든 회의실을 기준으로 시간표 생성
+        Map<Long, Map<String, ReservationVO>> schedule = new LinkedHashMap<>();
+        for (MeetingRoomVO room : allRooms) {
+            long roomNo = room.getRoomNo();
+            schedule.putIfAbsent(roomNo, new LinkedHashMap<>()); // 모든 회의실 추가
+        }
+
+        for (ReservationVO reservation : reservations) {
+            long roomNo = reservation.getRoomNo();
+            LocalTime startTime = reservation.getReservationStartTime().toLocalDateTime().toLocalTime();
+            LocalTime endTime = reservation.getReservationEndTime().toLocalDateTime().toLocalTime();
+
+            for (LocalTime time = startTime; time.isBefore(endTime); time = time.plusHours(1)) {
+                String timeKey = time.toString();
+                schedule.get(roomNo).put(timeKey, reservation); // ReservationVO 객체 저장
+            }
+        }
+
+        // 모델에 데이터 추가
+        model.addAttribute("schedule", schedule);
+        model.addAttribute("allRooms", allRooms);
+        model.addAttribute("currentDate", currentDate);
+        model.addAttribute("companyNo", companyNo);
+
+        return "gw:reservation/reservationList"; // JSP 경로
+    }
+}
+

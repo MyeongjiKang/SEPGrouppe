@@ -1,0 +1,22 @@
+package kr.or.ddit.works.approval.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/{companyNo}/apprHome")
+public class ApprHomeController {
+
+	@GetMapping("")
+	public String apprHome(
+			@PathVariable("companyNo") String companyNo
+			, Model model
+	) {
+		model.addAttribute("companyNo", companyNo);
+		return "gw:appr/apprHome";
+	}
+
+}

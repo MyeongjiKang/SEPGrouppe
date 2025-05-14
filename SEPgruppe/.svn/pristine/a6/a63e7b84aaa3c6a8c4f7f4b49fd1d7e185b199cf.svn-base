@@ -1,0 +1,80 @@
+package kr.or.ddit.works.approval.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/{companyNo}/box")
+public class DocBoxController {
+	
+	/**
+	 * 기안문서함 - 기안문서 전체 조회
+	 * @param companyNo
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("draftDocs")
+	public String selectDraftList(
+		@PathVariable("companyNo") String companyNo
+		, Model model
+	) {
+		model.addAttribute("companyNo", companyNo);
+		return "gw:appr/boxDraftDocList";
+	}
+	
+	/**
+	 * 임시 저장함 - 임시저장된 문서 전체 조회
+	 * @param companyNo
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("tempDocs")
+	public String selectTempSaveList(
+		@PathVariable("companyNo") String companyNo
+		, Model model
+	) {
+		return "gw:appr/boxTempSaveList";
+	}
+	
+	/**
+	 * 결재 문서함 - 결재한 문서 전체 조회
+	 * @param companyNo
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("apprDocs")
+	public String selectApprDocList(
+		@PathVariable("companyNo") String companyNo
+		, Model model
+	) {
+		model.addAttribute("companyNo", companyNo);
+		return "gw:appr/boxApprDocList";
+	}
+	
+	/**
+	 * 참조/열람 문서함 - 참조/열람 가능한 문서 전체 조회
+	 * @param companyNo
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("refDocs")
+	public String selectRefDocList(
+		@PathVariable("companyNo") String companyNo
+		, Model model
+	) {
+		model.addAttribute("companyNo", companyNo);
+		return "gw:appr/boxRefDocList";
+	}
+	
+	@GetMapping("depDocs")
+	public String selectDepDocList(
+		@PathVariable("companyNo") String companyNo
+		, Model model
+	) {
+		model.addAttribute("companyNo", companyNo);
+		return "gw:appr/departmentDocList";
+	}
+}

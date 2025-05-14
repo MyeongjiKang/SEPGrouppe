@@ -1,0 +1,77 @@
+package kr.or.ddit.works.notice.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+/**
+ * 공지사항 컨트롤러 
+ * 
+ * @author JYS
+ * @since 2025. 3. 14.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 14.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+@Controller
+@RequestMapping("/{companyNo}/notice")
+public class NoticeController {
+	
+    
+    /** 공지사항 목록 조회 */
+    @GetMapping("")
+    public String selectListAllNotice(
+    	@PathVariable("companyNo") String companyNo
+    	, Model model
+    ) {
+    	model.addAttribute("companyNo", companyNo);
+        return "gw:notice/noticeList";
+    }
+    
+    /** 공지사항 상세 조회 */
+    @GetMapping("/{noticeNo}")
+    public String selectNoticeDetail(
+    	@PathVariable("companyNo") String companyNo 
+        , @PathVariable("noticeNo") String noticeNo
+        , Model model
+    ) {
+    	model.addAttribute("companyNo", companyNo);
+        return "gw:notice/noticeDetail";
+    }
+
+    /** 관리자 - 새 공지글 등록 폼 이동 */
+    @GetMapping("new")
+    public String insertNoticeFormUI(@PathVariable("companyNo") String companyNo
+	, Model model
+    ) {
+    	model.addAttribute("companyNo", companyNo);
+        return "gw:admin/notice/noticeForm";
+    }
+
+    /** 관리자 - 새 공지글 등록 */
+    @PostMapping("new")
+    public String insertNotice(@PathVariable("companyNo") String companyNo
+	, Model model
+    ) {
+    	model.addAttribute("companyNo", companyNo);
+        return "redirect:/" + companyNo + "/notice";
+    }
+
+    /** 관리자 - 공지글 수정 */
+    @PutMapping("{noticeNo}/edit")
+    public String updateNotice(
+		@PathVariable("companyNo") String companyNo
+        , @PathVariable("noticeNo") long noticeNo
+        , Model model
+    ) {
+    	model.addAttribute("companyNo", companyNo);
+        return "redirect:/" + companyNo + "/notice/" + noticeNo;
+    }
+}

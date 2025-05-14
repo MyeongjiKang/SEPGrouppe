@@ -1,0 +1,89 @@
+<!-- 
+ * == 개정이력(Modification Information) ==
+ *   
+ *   수정일      			수정자           수정내용
+ *  ============   	============== =======================
+ *  2025. 3. 12.     	JYS            최초 생성
+ *
+-->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<head>
+	<link href="${pageContext.request.contextPath }/resources/groupware/css/organizationList.css" rel="stylesheet">
+</head>    
+<body>
+<div class="biggestContainer">
+    <div class="sidebarAll">
+        <h2>조직도 조회</h2>
+        <button class="btn btn-secondary">
+            <span class="btn-label">
+              <i class="fa fa-plus"></i>
+            </span>
+            작성
+        </button>    
+        <ul>
+            <li>
+                메뉴 1
+                <ul class="submenu">
+                    <li><a href="#">소메뉴 1-1</a></li>
+                    <li><a href="#">소메뉴 1-2</a></li>
+                    <li><a href="#">소메뉴 1-3</a></li>
+                </ul>
+            </li>
+            <li>
+                메뉴 2
+                <ul class="submenu">
+                    <li><a href="#">소메뉴 2-1</a></li>
+                    <li><a href="#">소메뉴 2-2</a></li>
+                </ul>
+            </li>
+            <li>
+                메뉴 3
+                <ul class="submenu">
+                    <li><a href="#">소메뉴 3-1</a></li>
+                    <li><a href="#">소메뉴 3-2</a></li>
+                    <li><a href="#">소메뉴 3-3</a></li>
+                    <li><a href="#">소메뉴 3-4</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+	<div class="contentContainer">
+	    <div class="content">
+	        <h1>예시임~</h1>
+	        <div class="pg-orgchart">
+	            <div class="org-chart">
+	              <ul>
+	              <li>
+	                <div class="user">
+	                  <img src="https://s3.amazonaws.com/uifaces/faces/twitter/adellecharles/128.jpg" class="img-responsive" />
+	                  <div class="name">손현진</div>
+	                  <div class="role">Project Leader</div>
+	                  <a class="manager" href="#">IT팀</a>
+	                </div>
+	                <ul>
+	                  <li>
+	                    <div class="user">
+	                      <img src="https://s3.amazonaws.com/uifaces/faces/twitter/nzcode/128.jpg" class="img-responsive" />
+	                      <div class="name">그리고 그의</div>
+	                      <div class="role">UserInterface Architect</div>
+	                      <a class="manager" href="#">IT팀</a>
+	                    </div>
+	                  </li>
+	                  <li>
+	                    <div class="user">
+	                      <img src="https://s3.amazonaws.com/uifaces/faces/twitter/vista/128.jpg" class="img-responsive" />
+	                      <div class="name">쫄따구들</div>
+	                      <div class="role">Data Architect</div>
+	                      <a class="manager" href="#">IT팀</a>
+	                    </div>
+	                  </li>
+	                </ul>
+	              </li>
+	            </ul>
+	            </div>
+	        </div>
+	    </div>	
+    </div>
+</div>    
+</body>

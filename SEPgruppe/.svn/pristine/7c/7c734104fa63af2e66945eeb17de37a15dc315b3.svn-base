@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+body {
+    background-color: #f8f9fa;
+}
+
+#calendar {
+    margin: 20px 0;
+}
+
+.table {
+    margin-top: 20px;
+}
+
+.available-slot {
+    background-color: #f0f0f0; /* 비어 있는 슬롯 색상 */
+    cursor: pointer; /* 클릭 가능함을 나타내는 커서 */
+}
+
+.time-slot {
+    background-color: #007bff; /* 예약된 슬롯 색상 */
+    color: white; /* 예약된 슬롯 텍스트 색상 */
+}

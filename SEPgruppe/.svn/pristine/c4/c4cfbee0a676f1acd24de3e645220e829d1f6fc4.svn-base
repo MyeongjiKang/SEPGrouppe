@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.ddit.works.mybatis.mappers.EmployeeMapper">
+
+	<!-- 마이페이지 정보 수정 -->
+	<update id="updateCompany">
+		UPDATE EMPLOYEE
+		SET
+			EMP_PW = #{empPw,jdbcType=VARCHAR}
+			, EMP_ZIP = #{empZip,jdbcType=VARCHAR}
+			, EMP_ADD1 = #{empAdd1,jdbcType=VARCHAR}
+			, EMP_ADD2 = #{empAdd2,jdbcType=VARCHAR}
+			, EMP_EMAIL = #{empEmail,jdbcType=VARCHAR}
+			, EMP_PHONE = #{empPhone,jdbcType=VARCHAR}
+			<if test="@org.apache.commons.lang3.StringUtils@isNotBlank(empImg)">
+			, EMP_IMG = #{empImg,jdbcType=VARCHAR}
+			</if>
+		WHERE EMP_ID = #{empId,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 회원정보 조회 -->
+	<select id="selectCompany">
+		SELECT
+		    EMP_ID
+		  , COMPANY_NO
+		  , POSITION_CD
+		  , DEPT_CD
+		  , EMP_NO
+		  , EMP_NM
+		  , EMP_PW
+		  , EMP_ZIP
+		  , EMP_ADD1
+		  , EMP_ADD2
+		  , EMP_EMAIL
+		  , EMP_PHONE
+		  , EMP_REGDATE
+		  , EMP_RETIRE
+		  , EMP_IMG
+		FROM
+		    EMPLOYEE
+		WHERE EMP_ID = #{empId}
+	</select>
+
+
+</mapper>

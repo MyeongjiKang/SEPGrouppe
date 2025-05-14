@@ -1,0 +1,67 @@
+<!-- 
+ * == 개정이력(Modification Information) ==
+ *   
+ *   수정일      			수정자           수정내용
+ *  ============   	============== =======================
+ *  2025. 3. 18.     	JYS            최초 생성
+ *
+-->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!-- css -->
+<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/groupware/css/approval/apprHome.css"/>
+
+<!-- js -->
+<script src="${pageContext.request.contextPath }/resources/groupware/js/approval/apprHome.js"></script>
+
+
+<!-- 새 문서 작성 Modal -->
+<div class="modal fade" id="newApprModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="newApprLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="newApprLabel">결재 양식 선택</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       
+         <div class="container-fluid">
+         	<div class="row">
+         	 <!-- 결재양식 선택 (좌측)-->
+         		<div class="col-md-4" >
+         			<span>결재 양식 선택</span>
+         			<div class="input-group">
+					    <input type="text" id="searchDoc" class="form-control" placeholder="양식 제목을 입력하세요.">
+					    <button type="submit" class="btn btn-outline-primary">🔍</button>
+					</div>
+         			<ul id="templateTree" class="list-group scrollable-list">
+         				<!-- AJAX로 동적 로딩 -->
+         				<!-- <li class="list-group-item">업무기안</li>
+				        <li class="list-group-item">경조사 신청</li>
+				        <li class="list-group-item">업무협조</li>
+				        <li class="list-group-item">휴가 신청</li>
+				        <li class="list-group-item">사무용품 신청</li>
+				        <li class="list-group-item">지출 결의서</li>
+				        <li class="list-group-item">일반 품의서</li>
+				        <li class="list-group-item">회계 관련 문서</li>
+				        <li class="list-group-item">기타 양식</li> -->
+         			</ul>
+         		</div>
+         	 <!-- 결재양식 상세보기(우측) -->
+         		<div class="col-md-8 ">
+         			결재 양식 상세보기
+         			<div id="templateDetails">
+         				<p>양식을 선택하면 상세 정보가 표시됩니다.</p>
+         			</div>
+         		</div>
+         	</div>
+         </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Understood</button>
+      </div>
+    </div>
+  </div>
+</div>

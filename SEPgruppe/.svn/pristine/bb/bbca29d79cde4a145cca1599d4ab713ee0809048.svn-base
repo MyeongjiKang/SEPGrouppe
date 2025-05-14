@@ -1,0 +1,76 @@
+/** 
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ * 2025. 3. 26.     	JSW            최초 생성
+ *
+ * </pre>
+ */
+$(document).ready(function () {
+        $("#multi-filter-select").DataTable({
+          pageLength: 5,
+          initComplete: function () {
+            this.api()
+              .columns()
+              .every(function () {
+                var column = this;
+                var select = $(
+                  '<select class="form-select"><option value=""></option></select>'
+                )
+                  .appendTo($(column.footer()).empty())
+                  .on("change", function () {
+                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                    column
+                      .search(val ? "^" + val + "$" : "", true, false)
+                      .draw();
+                  });
+
+                column
+                  .data()
+                  .unique()
+                  .sort()
+                  .each(function (d, j) {
+                    select.append(
+                      '<option value="' + d + '">' + d + "</option>"
+                    );
+                  });
+              });
+          },
+        });
+		
+		$.ajax({
+		  url: contextPath + "/" + companyNo + "/employee/departments",
+		  type: 'GET',
+		  success: function (departments) {
+		    const $deptSelect = $('#deptCd');
+		    $deptSelect.empty().append('<option value="">부서 선택</option>');
+		    departments.forEach(dept => {
+		      $deptSelect.append(`<option value="${dept.deptCd}">${dept.deptName}</option>`);
+		    });
+		  }
+		});
+		
+		$('#employeeForm').on('submit', function (e) {
+		  e.preventDefault();
+		  const formData = new FormData(this);
+		  $.ajax({
+		    url: contextPath + "/" + companyNo + "/employee/new",
+		    type: 'POST',
+		    data: formData,
+		    processData: false,
+		    contentType: false,
+		    success: function () {
+		      alert('사원 등록 성공!');
+		      $('#employeeModal').modal('hide');
+		      location.reload();
+		    },
+		    error: function () {
+		      alert('사원 등록 실패');
+		    }
+		  });
+		});
+		
+      });

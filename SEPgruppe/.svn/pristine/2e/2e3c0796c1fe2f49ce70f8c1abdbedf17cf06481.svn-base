@@ -1,0 +1,88 @@
+package kr.or.ddit.works.organization.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * 인사관리 컨트롤러
+ * 
+ * @author JYS
+ * @since 2025. 3. 13.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 13.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+@Controller
+//@RequestMapping("/{companyNo}/employee")
+@RequestMapping("/a001/employee")
+public class EmployeeController {
+
+    /** 관리자 - 전사 인사정보 조회 */
+    /** 권한을 부여받은 자 - 각 부서 사원 인사정보 조회 */
+    @GetMapping("")
+    public String selectListAllEmployee(@PathVariable("companyNo") String companyNo) {
+        return "gw:employee/employeeList";
+    }
+
+    /** 관리자 - 상세 인사정보 조회 */
+    /** 권한을 부여받은 자 - 각 부서 사원 인사정보 조회 */
+    @GetMapping("/{empNo}")
+    public String selectEmployee(@PathVariable("companyNo") String companyNo, @PathVariable("empNo") String empNo) {
+        return "gw:employee/employeeDetail";
+    }
+
+    /** 관리자 - 인사 정보 등록 폼 */
+    @GetMapping("/new")
+    public String insertEmployeeFormUI(@PathVariable("companyNo") String companyNo) {
+        return "gw:employee/employeeForm";
+    }
+
+    /** 관리자 - 인사 정보 등록 */
+    @PostMapping("/new")
+    public String insertEmployee(@PathVariable("companyNo") String companyNo) {
+        return "redirect:/" + companyNo + "/employee";
+    }
+
+    /** 관리자 - 인사 정보 수정 폼 */
+    @GetMapping("/{empNo}/edit")
+    public String updateEmployeeFormUI(@PathVariable("companyNo") String companyNo, @PathVariable("empNo") String empNo) {
+        return "gw:employee/employeeEdit";
+    }
+
+    /** 관리자 - 인사 정보 수정 */
+    @PutMapping("/{empNo}/edit")
+    public String updateEmployee(@PathVariable("companyNo") String companyNo, @PathVariable("empNo") String empNo) {
+        return "redirect:/" + companyNo + "/employee/" + empNo;
+    }
+
+    /** 관리자 - 인사 정보 삭제(퇴사 처리) (비활성화) */
+    @PutMapping("/{empNo}/deactivate")
+    public String deactivateEmployee(@PathVariable("companyNo") String companyNo, @PathVariable("empNo") String empNo) {
+        // 삭제 처리 로직 추가 (비활성화 처리)
+        return "redirect:/" + companyNo + "/employee";
+    }
+    
+    /** 관리자 - 인사 관리 권한 설정 */
+    
+    /** 사원 - 내 인사 정보 조회 */
+    @GetMapping("/myEmployee")
+//    public String selectMyEmployee(@PathVariable("companyNo") String companyNo) {
+//    	return "gw:employee/myEmployee";
+//    }
+    public String selectMyEmployee() {
+    	return "gw:employee/myEmployee";
+    }
+    
+    
+}

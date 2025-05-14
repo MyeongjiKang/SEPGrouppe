@@ -1,0 +1,39 @@
+<!--
+ * == 개정이력(Modification Information) ==
+ *
+ *   수정일      			수정자           수정내용
+ *  ============   	============== =======================
+ *  2025. 3. 13.     	JYS            최초 생성
+ *
+-->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<head>
+	<link href="${pageContext.request.contextPath }/resources/groupware/css/employee/myEmployee.css" rel="stylesheet">
+</head>
+<body>
+<div class="biggestContainer">
+    <header class="top-nav">
+       <nav class="nav-container">
+           <ul class="nav-menu">
+               <li><a href="#">내 근태 현황</a></li>
+               <li><a href="#">내 연차 내역</a></li>
+               <li><a href="#">내 인사 정보</a></li>
+           </ul>
+
+           <div class="nav-right">
+               <span class="divider"></span>
+               <button class="lang-btn">🌍 EN ▼</button>
+               <ul class="nav-links">
+                   <li><a href="#">My Portal</a></li>
+                   <li><a href="#">나의 메일함</a></li>
+                   <li><a href="#">나의 일정</a></li>
+               </ul>
+               <button class="donate-btn">❤️ 로그아웃</button>
+           </div>
+       </nav>
+    </header>
+
+
+</div>
+</body>

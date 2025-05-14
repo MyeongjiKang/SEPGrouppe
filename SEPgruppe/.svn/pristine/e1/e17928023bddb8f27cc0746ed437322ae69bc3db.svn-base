@@ -1,0 +1,15 @@
+package kr.or.ddit.works.alarm.service;
+
+import javax.inject.Inject;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import kr.or.ddit.works.mybatis.mappers.AlarmMapper;
+
+@Mapper
+public class AlarmServiceImpl implements AlarmService {
+	
+	@Inject
+	AlarmMapper mapper;
+
+}

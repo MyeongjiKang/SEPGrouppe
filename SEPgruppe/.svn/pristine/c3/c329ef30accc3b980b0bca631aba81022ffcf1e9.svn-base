@@ -1,0 +1,21 @@
+package kr.or.ddit.works.login.vo;
+
+import java.io.Serializable;
+
+import lombok.Data;
+import lombok.ToString;
+
+@ToString(callSuper = true)
+@Data
+public class CompaniesVO extends AllUserVO implements Serializable{
+	
+	private String contactId;
+	private String companyName;
+	private String contactNm;
+	private String contactPhone;
+	private String contactEmail;
+	private String contactPw;
+	private String businessRegNo;
+	private String isDeleted;
+	private String companyNo;
+}

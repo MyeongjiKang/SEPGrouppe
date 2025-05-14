@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+/* .container { */
+/*     display: grid; */
+/*     grid-template-columns: repeat(2, 200px) 1fr; 사이드바 2개와 콘텐츠 영역 */
+/* } */
+
+.main-panel {
+  transition: width 0.3s; /* 너비 변화에 애니메이션 추가 */
+}

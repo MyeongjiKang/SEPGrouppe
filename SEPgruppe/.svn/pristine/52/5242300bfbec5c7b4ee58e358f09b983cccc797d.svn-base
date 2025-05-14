@@ -1,0 +1,108 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const apprBasePath = window.location.pathname.split("/").slice(0, -2).join("/");
+    const apprInfoModal = document.querySelector("#apprInfoModal");
+    const approvalTableBody = document.querySelector("#approvalTableBody");
+
+    // Bootstrap Toast 인스턴스 가져오기
+    const modalToastEl = document.querySelector("#modalDuplicateToast");
+    const modalToast = new bootstrap.Toast(modalToastEl);
+
+    const initFancyTree = () => {
+        $("#depTree").fancytree({
+            source: {
+                url: `${apprBasePath}/organization/parentDep`,
+                cache: false
+            },
+            extensions: ["dnd5"],
+            dnd5: {
+                preventVoidMoves: true,
+                preventRecursion: true,
+                autoExpandMS: 400,
+                dragStart: function(node, data) {
+                    if (!node.folder) {
+                        const name = node.title;
+                        const department = node.parent ? node.parent.title : "";
+                        data.dataTransfer.setData("text/plain", `${name},${department}`);
+                        return true;
+                    }
+                    return false;
+                },
+                dragEnter: function(node, data) {
+                    return !node.folder;
+                }
+            },
+            lazyLoad: function(event, data) {
+                let mode = data.node.data.parentDeptCd ? "employee" : "department";
+                data.result = {
+                    url: `${apprBasePath}/organization/childeDep`,
+                    data: { mode: mode, parent: data.node.key },
+                    cache: false
+                };
+            }
+        });
+    };
+
+    approvalTableBody.addEventListener("dragover", function(event) {
+        event.preventDefault();
+        approvalTableBody.style.backgroundColor = "#f0f0f0";
+    });
+
+    approvalTableBody.addEventListener("dragleave", function(event) {
+        approvalTableBody.style.backgroundColor = "";
+    });
+
+    approvalTableBody.addEventListener("drop", function(event) {
+        event.preventDefault();
+        approvalTableBody.style.backgroundColor = "";
+
+        const rawData = event.dataTransfer.getData("text/plain");
+        if (rawData) {
+            const [name, department] = rawData.split(",");
+
+            // 중복 확인 (같은 이름 + 부서 조합이 있는지 검사)
+            let isDuplicate = false;
+            approvalTableBody.querySelectorAll("tr").forEach(row => {
+                const rowName = row.children[2]?.textContent.trim();
+                const rowDept = row.children[3]?.textContent.trim();
+                if (rowName === name && rowDept === department) {
+                    isDuplicate = true;
+                }
+            });
+
+            if (isDuplicate) {
+                modalToast.show(); // 중복이면 토스트 띄우기
+				
+				// 일정 시간(3초) 후 자동으로 토스트 닫기
+                setTimeout(() => {
+                    modalToast.hide();
+                }, 2000); // 2000ms = 2초
+
+                return;
+            }
+
+            // 새로운 행 추가
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+                <td>&nbsp;</td>
+                <td>
+                    <select>
+                        <option>타입</option>
+                        <option>결재</option>
+                    </select>
+                </td>
+                <td>${name}</td>
+                <td>${department}</td>
+                <td>상태</td>
+                <td><i class="fa fa-trash delete-icon" style="cursor:pointer;"></i></td>
+            `;
+            approvalTableBody.appendChild(newRow);
+
+            // 삭제 기능 추가
+            newRow.querySelector(".delete-icon").addEventListener("click", function() {
+                newRow.remove();
+            });
+        }
+    });
+
+    apprInfoModal.addEventListener("shown.bs.modal", initFancyTree);
+});

@@ -1,0 +1,68 @@
+package kr.or.ddit.works.organization.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import kr.or.ddit.works.organization.service.OrganizationService;
+import kr.or.ddit.works.organization.vo.DepartmentVO;
+
+/**
+ * 부서 컨트롤러 
+ * 
+ * @author JYS
+ * @since 2025. 3. 13.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 13.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+@Controller
+@RequestMapping("/{companyNo}/department")
+public class DepartmentController {
+	
+	
+    /** 부서 전체 조회 */
+    @GetMapping("")
+    public String selectListAllDepartment(@PathVariable("companyNo") String companyNo, Model model) {
+        return "gw:department/departmentList";
+    }
+
+    /** 관리자 - 부서 추가 폼 UI 이동 */
+    @GetMapping("new")
+    public String insertDepartmentFormUI(@PathVariable("companyNo") String companyNo) {
+        return "gw:department/departmentFormUI";
+    }
+
+    /** 관리자 - 부서 추가 처리 */
+    @PostMapping("new")
+    public String insertDepartment(@PathVariable("companyNo") String companyNo) {
+        return "redirect:/" + companyNo + "/department";
+    }
+
+    /** 관리자 - 부서 수정 폼 UI 이동 */
+    @GetMapping("{deptCd}/edit")
+    public String updateDepartmentFormUI(@PathVariable("companyNo") String companyNo, 
+                                         @PathVariable("deptCd") String deptCd) {
+        return "gw:department/departmentEdit";
+    }
+
+    /** 관리자 - 부서 수정 처리 */
+    @PostMapping("{deptCd}/edit")
+    public String updateDepartment(@PathVariable("companyNo") String companyNo, 
+                                   @PathVariable("deptCd") String deptCd) {
+        return "redirect:/" + companyNo + "/department";
+    }
+}

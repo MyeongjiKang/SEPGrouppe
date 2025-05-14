@@ -1,0 +1,45 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<section class="section-padding">
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        고객사 목록
+    </div>
+    <div class="card-body">
+        <table id="datatablesSimple">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>고객사명</th>
+                    <th>구독상품</th>
+                    <th>구독시작일</th>
+                    <th>갱신여부</th>
+                    <th>갱신일자</th>
+                    <th>결제상태</th> <!-- 결제완료, 연체 -->
+                    <th>최근결제일자</th>
+                    <th>결제금액</th>
+                    <th>상담요청건수</th>
+                    <th>상담요청진생상태</th> <!-- 대기, 진행중, 완료 -->
+                </tr>
+            </thead>
+            <tbody>
+            	<!-- tr태그 for문으로 데이터가 있을경우 생기도록 해야 함 -->
+                <tr>
+                    <td>데이터</td>
+                    <td>데이터</td>
+                    <td>데이터</td>
+                    <td>데이터</td>
+                    <td>데이터</td>
+                    <td>데이터</td>
+                    <td>데이터</td>
+                    <td>데이터</td>
+                    <td>데이터</td>
+                    <td>데이터</td>
+                    <td>데이터</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</section>

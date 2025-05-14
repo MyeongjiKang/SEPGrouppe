@@ -1,0 +1,41 @@
+package kr.or.ddit.works.mybatis.mappers;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import kr.or.ddit.works.organization.vo.EmployeeVO;
+
+
+/**
+ * 사원 매퍼
+ * @author JYS
+ * @since 2025. 3. 16.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 16.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+@Mapper
+public interface EmployeeMapper {
+
+	/**
+	 * 마이페이지 정보 수정
+	 * @param companyNo 로그인된 고객사번호
+	 * @return
+	 */
+	public int updateCompany(EmployeeVO member);
+
+	/**
+	 * 회원정보 조회
+	 * @param empId
+	 * @return
+	 */
+	public EmployeeVO selectCompany(@Param("empId") String empId);
+
+}

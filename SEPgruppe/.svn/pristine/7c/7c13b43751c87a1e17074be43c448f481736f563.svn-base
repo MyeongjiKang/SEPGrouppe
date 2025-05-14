@@ -1,0 +1,107 @@
+package kr.or.ddit.works.reservation.service;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import kr.or.ddit.works.mybatis.mappers.ReservationMapper;
+import kr.or.ddit.works.reservation.vo.MeetingRoomVO;
+import kr.or.ddit.works.reservation.vo.ReservationVO;
+
+/**
+ * 예약 서비스 임플
+ * 
+ * @author KKM
+ * @since 2025. 3. 14.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 14.     	KKM	          최초 생성
+ * </pre>
+ */
+@Service
+public class ReservationServiceImpl implements ReservationService {
+
+	@Autowired
+    private ReservationMapper reservationMapper;
+
+    @Override
+    public List<ReservationVO> selectListAllReservation() {
+        return reservationMapper.selectListAllReservation();
+    }
+
+    @Override
+    public ReservationVO selectReservationDetail(String reservationNo) {
+        return reservationMapper.selectReservationDetail(reservationNo);
+    }
+
+    @Override
+    public boolean insertReservation(ReservationVO reservation) {
+        return reservationMapper.insertReservation(reservation) > 0;
+    }
+
+    @Override
+    public boolean updateReservation(ReservationVO reservation) {
+        return reservationMapper.updateReservation(reservation) > 0;
+    }
+
+    @Override
+    public boolean deleteReservation(String reservationNo) {
+        return reservationMapper.deleteReservation(reservationNo) > 0;
+    }
+
+    @Override
+    public List<ReservationVO> getReservationsByDate(LocalDate reservationDate) {
+        return reservationMapper.selectReservationsByDate(reservationDate);
+    }
+
+    @Override
+    public List<ReservationVO> getReservationsByDateGrouped(LocalDate reservationDate) {
+        return reservationMapper.selectReservationsByDate(reservationDate); // 적절한 메서드로 수정 필요
+    }
+
+    @Override
+    public List<ReservationVO> getMyReservationsByEmpId(String empId) {
+        return reservationMapper.getMyReservationsByEmpId(empId);
+    }
+
+    @Override
+    public List<MeetingRoomVO> selectListAllRoom() {
+        return reservationMapper.selectListAllRoom();
+    }
+
+    @Override
+    public MeetingRoomVO selectRoomDetail(long roomNo) {
+        // 회의실 상세 조회 로직 추가
+        return reservationMapper.selectRoomDetail(roomNo);
+    }
+
+    @Override
+    public boolean insertRoom(MeetingRoomVO meetingroom) {
+        // 회의실 등록 로직 추가
+        return reservationMapper.insertRoom(meetingroom) > 0;
+    }
+
+    @Override
+    public boolean updateRoom(MeetingRoomVO meetingroom) {
+        // 회의실 수정 로직 추가
+        return reservationMapper.updateRoom(meetingroom) > 0;
+    }
+
+    @Override
+    public boolean deleteRoom(long roomNo) {
+        // 회의실 삭제 로직 추가
+        return reservationMapper.deleteRoom(roomNo) > 0;
+    }
+
+    @Override
+    public List<ReservationVO> getReservationsByDateAndRoom(LocalDate date, long roomNo) {
+        return reservationMapper.getReservationsByDateAndRoom(date, roomNo);
+    }
+}

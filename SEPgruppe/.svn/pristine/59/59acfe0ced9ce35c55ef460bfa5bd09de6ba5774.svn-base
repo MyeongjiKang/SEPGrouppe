@@ -1,0 +1,55 @@
+package kr.or.ddit.works.subscription.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+
+/**
+ * 자동결제 및 환불 컨트롤
+ * @author JYS
+ * @since 2025. 3. 14.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 14.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+@Controller
+@RequestMapping("/payment")
+public class PaymentsController {
+	
+	// 전체 고객사 결제 내역 목록 조회
+	@GetMapping("")
+	public String selectListAllPayment() {
+		return "sep:admin/subscription/paymentList";
+	}
+	
+	// 결제 내역 상세 조회
+	@GetMapping("/{paymentNo}")
+	public String selectPaymentDetail(@PathVariable("paymentNo") String paymentNo) {
+		// paymentNo를 이용해 상세 조회 로직 구현
+		return "sep:admin/subscription/paymentDetail";
+	}
+	
+	// 결제 실패/연체 내역 목록 조회
+	
+	// 환불 요청된 고객사 목록 조회
+	@GetMapping("/refund")
+	public String selectListAllRefund() {
+		return "sep:admin/subscription/refundList";
+	}
+	
+	// 환불 내역 상세 조회
+	@GetMapping("/refund/{refundId}")
+	public String selectRefundDetail(@PathVariable("refundId") String refundId) {
+		// refundId를 이용해 상세 조회 로직 구현
+		return "sep:admin/subscription/refundDetail";
+	}
+}

@@ -1,0 +1,72 @@
+package kr.or.ddit.works.reservation.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import kr.or.ddit.paging.PaginationInfo;
+import kr.or.ddit.works.reservation.vo.ReservationVO;
+
+/**
+ * 예약 서비스 임플
+ * 
+ * @author KKM
+ * @since 2025. 3. 14.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 14.     	KKM	          최초 생성
+ *
+ * </pre>
+ */
+@Service
+public class ReservationServiceImpl implements ReservationService {
+    private List<ReservationVO> reservationList = new ArrayList<>(); // 예약 정보를 저장하는 리스트
+
+    @Override
+    public List<ReservationVO> selectListAllReservation(PaginationInfo<ReservationVO> paging) {
+        // 페이징 처리를 포함한 예약 목록 반환 (여기서는 간단히 전체 리스트 반환)
+        return reservationList;
+    }
+
+    @Override
+    public ReservationVO selectDetailReservation(Long reservationNo) {
+        // 예약 번호로 예약 정보 조회
+        return reservationList.stream()
+                .filter(reservation -> reservation.getReservationNo() == reservationNo)
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public boolean insertReservation(ReservationVO reservation) {
+        // 새로운 예약 등록
+        return reservationList.add(reservation);
+    }
+
+    @Override
+    public boolean updateReservation(ReservationVO reservation) {
+        // 예약 수정 로직
+        ReservationVO existingReservation = selectDetailReservation(reservation.getReservationNo());
+        if (existingReservation != null) {
+            existingReservation.setRoomNo(reservation.getRoomNo());
+            existingReservation.setEmpId(reservation.getEmpId()); // 사원 아이디 업데이트
+            existingReservation.setReservationStartTime(reservation.getReservationStartTime()); // 시작 시간 업데이트
+            existingReservation.setReservationEndTime(reservation.getReservationEndTime()); // 종료 시간 업데이트
+            existingReservation.setReservationStatus(reservation.getReservationStatus()); // 상태 업데이트
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteReservation(Long reservationNo) {
+        // 예약 삭제 로직
+        return reservationList.removeIf(reservation -> reservation.getReservationNo() == reservationNo);
+    }
+}

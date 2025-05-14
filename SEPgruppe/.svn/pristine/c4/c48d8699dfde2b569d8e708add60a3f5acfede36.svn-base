@@ -1,0 +1,84 @@
+/** 
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 26.     	JSW            최초 생성
+ *
+ * </pre>
+ */
+@charset "UTF-8";
+
+.container {
+	display: flex;
+	margin: 20px;
+}
+
+.tree-container {
+	width: 300px;
+	border: 1px solid #ddd;
+	padding: 10px;
+	border-radius: 5px;
+}
+
+.detail-container {
+	flex: 1;
+	margin-left: 20px;
+	border: 1px solid #ddd;
+	padding: 20px;
+	border-radius: 5px;
+}
+
+.org-title {
+	font-size: 18px;
+	font-weight: bold;
+	margin-bottom: 15px;
+}
+
+.node-detail {
+	margin-top: 20px;
+}
+
+.fancytree-title {
+	font-size: 14px;
+}
+.tree-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.search-box {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+#employee-search {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  flex-grow: 1;
+}
+
+#search-btn {
+  padding: 8px 16px;
+  background-color: #2c7be5;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#search-result-count {
+  margin-top: 5px;
+  color: #666;
+  font-size: 0.9em;
+}
+
+/* 검색 하이라이트 스타일 */
+span.fancytree-title em.fancytree-match {
+  font-style: normal;
+  font-weight: bold;
+  background-color: yellow;
+}

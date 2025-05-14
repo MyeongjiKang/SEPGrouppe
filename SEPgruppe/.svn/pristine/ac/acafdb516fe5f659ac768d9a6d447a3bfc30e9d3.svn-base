@@ -1,0 +1,120 @@
+/** 
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ * 2025. 3. 26.     	JSW            최초 생성
+ *
+ * </pre>
+ */
+document.addEventListener("DOMContentLoaded", () => {
+       // FancyTree 초기화
+       $("#depTree").fancytree({
+           source: {
+               url: contextPath + "/" + companyNo + "/organization/admin/parentDep",
+               cache: false
+           },
+           lazyLoad: function(event, data) {
+               var node = data.node;
+               let mode = "employee";
+               if (!node.data.parentDeptCd) {
+                   mode = "department";
+               }
+               // Load child nodes via Ajax
+               data.result = {
+                   url: contextPath + "/" + companyNo + "/organization/admin/childeDep",
+                   data: {mode: mode, parent: node.key},
+                   cache: false
+               };
+           },
+           renderNode: function(event, data) {
+               var node = data.node;
+               var $span = $(node.span);
+			   
+			   // 기존 아이콘 제거 (중복 방지)
+			   $span.find(".fancytree-icon").remove();
+               if (node.data.empNm) {
+                   // 사원 노드
+                   $span.find(".fancytree-title").html(
+                       `<i class="fas fa-user-tie fancytree-icon"></i> ${node.data.empNm} (${node.data.positionName})`
+                   );
+			   } else {
+                  // 부서 노드
+                  $span.find(".fancytree-title").prepend(
+                      `<i class="fas fa-building fancytree-icon"></i> `
+                  );  
+               }
+           },
+           activate: function(event, data) {
+               var node = data.node;
+               if (node.data.empNm) {
+                   // 사원 정보 표시
+                   showEmployeeDetail(node.data);
+               } else {
+                   // 부서 정보 표시
+                   showDepartmentDetail(node.data);
+               }
+           }
+       });
+	    
+       function showEmployeeDetail(employee) {
+           const detailHtml = `
+               <div class="employee-detail">
+                   <h3>${employee.empNm} ${employee.positionName}</h3>
+                   <p><strong>사원번호:</strong> ${employee.empNo}</p>
+                   <p><strong>이메일:</strong> ${employee.empEmail || '-'}</p>
+                   <p><strong>전화번호:</strong> ${employee.empPhone || '-'}</p>
+                   <p><strong>입사일:</strong> ${employee.empRegdate || '-'}</p>
+               </div>
+           `;
+           $("#detailContent").html(detailHtml);
+       }
+       
+       function showDepartmentDetail(department) {
+           const detailHtml = `
+               <div class="department-detail">
+                   <h3>${department.deptName}</h3>
+                   <p><strong>부서코드:</strong> ${department.deptCd}</p>
+               </div>
+           `;
+           $("#detailContent").html(detailHtml);
+       }
+	   $("#search-btn").on("click", function() {
+	       var keyword = $("#employee-search").val().trim(); // 공백 제거
+	       
+	       if (keyword.length === 0) {
+				Swal.fire({
+				    icon: 'warning',
+				    title: '검색어 누락',
+				    text: '검색어를 입력해주세요.',
+				    confirmButtonColor: '#3085d6'
+				});
+	           return;
+	       }
+	       
+	       // AJAX 검색 요청
+	       $.ajax({
+	           url: contextPath + "/" + companyNo + "/organization/admin/search",
+	           type: "GET",
+	           data: { keyword: keyword },
+	           success: function(data) {
+	               // 검색 결과 처리 (기존 로직 유지)
+	               renderTree(data);
+	           },
+	           error: function(xhr) {
+				Swal.fire({
+				    icon: 'error',
+				    title: '검색 실패',
+				    html: `오류가 발생했습니다.`,
+				    confirmButtonColor: '#d33'
+				});
+	           }
+	       });
+	   });
+	   $("#employee-search").on("keyup", function(e) {
+	       if (e.key === "Enter") {
+	           $("#search-btn").click(); // 검색 버튼 클릭 이벤트 실행
+	       }
+	   });
+   });

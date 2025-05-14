@@ -1,0 +1,26 @@
+package kr.or.ddit.works.meeting.vo;
+
+import java.io.Serializable;
+
+import lombok.Data;
+
+/**
+ * 화상회의 참여자 이력 MEETINGS_PARTICIPANTS VO
+ * 
+ * @author JYS
+ * @since 2025. 3. 14.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 14.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+@Data
+public class MeetigParticipantVO implements Serializable {
+
+}

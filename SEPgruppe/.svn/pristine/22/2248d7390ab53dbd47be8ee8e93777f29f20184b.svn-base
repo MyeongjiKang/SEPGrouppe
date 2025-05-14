@@ -1,0 +1,37 @@
+package kr.or.ddit.works.reservation.vo;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.Date;
+
+import lombok.Data;
+
+/**
+ * 예약 RESERVATION VO
+ * 
+ * @author JYS
+ * @since 2025. 3. 13.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 13.     	JYS	          최초 생성
+ *  2025. 3. 14. 		KKM			  개발 시작
+ * </pre>
+ */
+
+@Data
+public class ReservationVO implements Serializable {
+	 private String reservationNo;             		// 예약번호
+	 private long roomNo;				  		// 예약한 회의실 번호
+	 private String roomName;  
+	 private String empId;				  		// 예약한 사원 아이디
+	 private String empNm;                       // 사원이름 추가
+	 private Date reservationDate;         		// 예약일
+	 private Timestamp reservationStartTime; 	// 시작 시간
+	 private Timestamp reservationEndTime;   	// 종료 시간
+	 private String reservationContent;     	// 예약 내용
+}

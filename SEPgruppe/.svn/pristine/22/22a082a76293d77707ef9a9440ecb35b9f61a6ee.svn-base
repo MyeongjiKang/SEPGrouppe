@@ -1,0 +1,93 @@
+<!-- 
+ * == 개정이력(Modification Information) ==
+ *   
+ *   수정일      			수정자           수정내용
+ *  ============   	============== =======================
+ *  2025. 3. 24.     	KKM            최초 생성
+ *
+-->
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %> <!-- 포맷 태그 라이브러리 추가 -->
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>예약 상세 정보</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h2 {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center">예약 상세 정보</h2>
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th>예약일</th>
+                    <td>
+                        <fmt:formatDate value="${reservation.reservationStartTime}" pattern="yyyy-MM-dd HH:mm"/> ~ 
+                        <fmt:formatDate value="${reservation.reservationEndTime}" pattern="yyyy-MM-dd HH:mm"/>
+                    </td>
+                </tr>
+                <tr>
+				    <th>예약자</th>
+				    <td>${reservation.empNm}</td> <!-- empId 대신 empNm 사용 -->
+				</tr>
+                <tr>
+                    <th>예약 내용</th>
+                    <td>${reservation.reservationContent}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="text-center">
+            <a href="${pageContext.request.contextPath}/${companyNo}/reservation" class="btn btn-secondary">목록으로 가기</a>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editReservationModal">예약 수정</button>
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteReservationModal">예약 취소</button>
+        </div>
+    </div>
+
+    <!-- 예약 삭제 모달 -->
+   <div class="modal fade" id="deleteReservationModal" tabindex="-1" role="dialog" aria-labelledby="deleteReservationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteReservationModalLabel">예약 취소하기</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                예약을 취소 하시겠습니까?
+            </div>
+            <div class="modal-footer">
+                <form action="${pageContext.request.contextPath}/${companyNo}/reservation/${reservation.reservationNo}/delete" method="post">
+                    <input type="hidden" name="_method" value="delete"/> <!-- Hidden input -->
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> <!-- CSRF 토큰 -->
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                    <button type="submit" class="btn btn-danger">확인</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+

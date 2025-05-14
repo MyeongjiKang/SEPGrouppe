@@ -1,0 +1,31 @@
+package kr.or.ddit.works.chat.vo;
+
+import java.io.Serializable;
+
+import lombok.Data;
+
+/**
+ * 채팅 CHAT VO
+ * @author JYS
+ * @since 2025. 3. 14.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 14.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+@Data
+public class ChatVO implements Serializable{
+	
+	private Long chatNo;      	  //채팅번호
+	private Long chatRoomNo;      //채팅방 번호
+	private String empId;      	  //사원 아이디
+	private String chatNm;        //채팅방 이름
+	private Long chatLastRead;    //마지막으로 읽은 메시지
+
+}

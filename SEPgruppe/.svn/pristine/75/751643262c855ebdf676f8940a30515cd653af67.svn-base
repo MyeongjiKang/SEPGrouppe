@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+
+
+.sepimg{
+	text-align: center;
+}
+
+#sep{
+	border: none;
+	background-color: #f6f9ff;
+	padding: 5%;
+}
+

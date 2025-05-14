@@ -1,0 +1,25 @@
+package kr.or.ddit.works.organization.vo;
+
+import java.io.Serializable;
+
+import lombok.Data;
+
+/**
+ * 조직관리 view ORGANIZATION VO
+ * @author JYS
+ * @since 2025. 3. 13.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 13.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+@Data
+public class OrganizationVO implements Serializable {
+
+}

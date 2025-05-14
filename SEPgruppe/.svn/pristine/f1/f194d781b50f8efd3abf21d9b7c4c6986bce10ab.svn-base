@@ -1,0 +1,51 @@
+package kr.or.ddit.works.organization.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * 조직도 관리 (organization) 컨트롤러
+ * 
+ * @author JYS
+ * @since 2025. 3. 12.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 12.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+@Controller
+//@RequestMapping("/{companyNo}/organization")
+@RequestMapping("/a001/organization")
+public class OrganizationController {
+
+    /** 조직도 전체 목록 조회 */
+    @GetMapping("")
+//    public String selectListAllOrganization(@PathVariable("companyNo") String companyNo) {
+//        return "gw:organization/organizationList";
+//    }
+    public String selectListAllOrganization() {
+        return "gw:organization/organizationList";
+    }
+    
+
+    /** 조직도 내 사원 상세 조회 */
+    @GetMapping("/{empId}/detail")
+    public String selectOrganizationEmp(@PathVariable("companyNo") String companyNo, @PathVariable("empId") int empId) {
+        return "gw:organization/organizationDetail";
+    }
+    
+    /**
+     * 부서 내 조직원 조회
+     */
+    
+    
+   
+}

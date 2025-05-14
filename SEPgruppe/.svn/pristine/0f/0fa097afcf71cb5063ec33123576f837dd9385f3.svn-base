@@ -1,0 +1,25 @@
+package kr.or.ddit.works.mail.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import kr.or.ddit.works.mail.service.MailService;
+
+@Controller
+@RequestMapping("/{companyNo}/mail")
+public class MailController {
+
+	@Autowired
+	private MailService mailService;
+	
+	@GetMapping("myMail.do")
+	public String readMailList(@PathVariable("companyNo") String companyNo, Model model){
+		model.addAttribute("companyNo", companyNo);
+		return "gw:mail/mailList";
+	}
+	
+}

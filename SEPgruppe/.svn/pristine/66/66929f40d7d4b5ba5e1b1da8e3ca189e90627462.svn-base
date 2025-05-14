@@ -1,0 +1,68 @@
+package kr.or.ddit.works.schedule.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import kr.or.ddit.paging.PaginationInfo;
+import kr.or.ddit.works.mybatis.mappers.ScheduleMapper;
+import kr.or.ddit.works.schedule.vo.ScheduleVO;
+
+/**
+ * 일정관리 서비스 임플
+ * @author JYS
+ * @since 2025. 3. 16.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 16.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+@Service
+public class ScheduleServiceImpl implements ScheduleService {
+
+	@Autowired
+	private ScheduleMapper scheduleMapper;
+
+	@Override
+	public List<ScheduleVO> readScheduleList() {
+		return scheduleMapper.selectScheduleList();
+	}
+
+	@Override
+	public List<ScheduleVO> readSchedule(int schdlNo) {
+		return scheduleMapper.selectSchedule(schdlNo);
+	}
+
+	@Transactional
+	@Override
+	public int createSchedule(ScheduleVO schedule) {
+		return scheduleMapper.insertSchedule(schedule);
+		
+	}
+
+	@Transactional
+	@Override
+	public int updateSchedule(ScheduleVO schedule) {
+		return scheduleMapper.updateSchedule(schedule);
+		
+	}
+
+	@Transactional
+	@Override
+	public int deleteSchedule(int schdlNo) {
+		return scheduleMapper.deleteSchedule(schdlNo);
+		
+	}
+
+
+
+
+}

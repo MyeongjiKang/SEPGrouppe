@@ -1,0 +1,16 @@
+package kr.or.ddit.works.mybatis.mappers;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import kr.or.ddit.works.schedule.vo.ScheduleVO;
+
+@Mapper
+public interface ScheduleMapper {
+    List<ScheduleVO> selectScheduleList();
+    List<ScheduleVO> selectSchedule(int schdlNo);
+    int insertSchedule(ScheduleVO schedule);
+    int updateSchedule(ScheduleVO schedule);
+    int deleteSchedule(int schdlNo);
+}

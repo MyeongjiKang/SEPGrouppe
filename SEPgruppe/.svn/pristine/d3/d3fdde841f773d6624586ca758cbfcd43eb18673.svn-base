@@ -1,0 +1,32 @@
+package kr.or.ddit.works.reservation.vo;
+
+import java.io.Serializable;
+
+import lombok.Data;
+
+/**
+ * 회의실 MEETINGROOM VO
+ *
+ * @author JYS
+ * @since 2025. 3. 13.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 13.     	JYS	          최초 생성
+ *  2025. 3. 14. 		KKM			  개발 시작
+ * </pre>
+ */
+
+@Data
+public class MeetingRoomVO implements Serializable {
+	private Long roomNo;
+	private String roomNm;
+	private String roomLocation;
+	private Long roomCapacity;
+	private String roomStatus;
+	private String roomGuidelines;
+}

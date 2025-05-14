@@ -1,0 +1,69 @@
+package kr.or.ddit.works.project.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+/**
+ * 공유 프로젝트 컨트롤러
+ * @author JYS
+ * @since 2025. 3. 14.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 14.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+@Controller
+@RequestMapping("/{companyNo}/project")
+//@RequestMapping("/a001/project")
+public class ProjectController {
+	
+    /** 일반 사원 - 사원 개인의 공유 프로젝트 목록 */
+    @GetMapping("")
+    public String selectListAllProject(@PathVariable("companyNo") String companyNo) {
+        return "gw:project/projectList";
+    }
+//    public String selectListAllProject() {
+//        return "gw:project/projectList";
+//    }
+	
+    /** 일반 사원 - 프로젝트 상세 보기 */
+    @GetMapping("{projectNo}")
+    public String selectProjectDetail(@PathVariable("companyNo") String companyNo, 
+                                      @PathVariable("projectNo") String projectNo) {
+        return "gw:project/projectDetail";
+    }
+	
+    /** 일반 사원 - 프로젝트 생성 폼 이동 */
+    @GetMapping("new")
+//    public String insertProjectFormUI(@PathVariable("companyNo") String companyNo) {
+//        return "gw:project/projectForm";
+//    }
+    public String insertProjectFormUI() {
+        return "gw:project/projectForm";
+    }
+	
+    /** 일반 사원 - 프로젝트 생성 */
+    @PostMapping("new")
+    public String insertProject(@PathVariable("companyNo") String companyNo) {
+        return "redirect:/" + companyNo + "/project";
+    }
+    
+    /** 일반사원 - 프로젝트 수정  */
+    @GetMapping("{projectNo}/edit")
+    public String updateProjectFormUI(@PathVariable("companyNo") String companyNo) {
+    	return "gw:project/projectEdit";
+    }
+    
+    /** 일반사원 - 프로젝트 수정 */
+    @PutMapping("{projectNo}/edit")
+    public String updateProject(@PathVariable("companyNo") String companyNo,
+    		 					@PathVariable("projectNo") String projectNo) {
+    	return "redirect:/" + companyNo + "/project/" + projectNo;
+    }
+}

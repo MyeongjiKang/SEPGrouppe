@@ -1,0 +1,101 @@
+package kr.or.ddit.works.address.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * 주소록 컨트롤러
+ * @author JYS
+ * @since 2025. 3. 15.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 15.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+@Controller
+@RequestMapping("/{companyNo}/address")
+public class AddressbookController {
+	
+
+	/**
+	 * 주소록 목록 조회
+	 * @param companyNo 고객사 아이디
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("")
+	public String selectListAllAddress(
+			@PathVariable("companyNo") String companyNo
+			, Model model
+	) {
+		model.addAttribute("companyNo", companyNo);
+		return "gw:address/addressList";
+	}
+
+	/**
+	 * 주소록 상세 조회
+	 * @param companyNo 고객사 아이디
+	 * @param adbkNo 주소록 번호
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/{adbkNo}")
+	public String selectAddress(
+			@PathVariable("companyNo") String companyNo
+			, @PathVariable("adbkNo") int adbkNo
+			, Model model
+	) {
+		model.addAttribute("companyNo", companyNo);
+		model.addAttribute("adbkNo", adbkNo);
+		return "gw:address/addressDetail";
+	}
+	
+	
+	/**
+	 * 관리자 - 주소록 추가 폼
+	 * @param companyNo 고객사 번호
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/new")
+	public String insertAddressFormUI(
+		@PathVariable("companyNo") String companyNo
+		, Model model
+	) {
+		model.addAttribute("companyNo", companyNo);
+		
+		return "gw:address/addressForm";
+		
+	}
+	
+	/**
+	 * 관리자 - 주소록 추가 폼
+	 * @param companyNo 고객사 번호
+	 * @param model
+	 * @return
+	 */
+	@PostMapping("/new")
+	public String insertAddress(
+		@PathVariable("companyNo") String companyNo
+		, Model model
+	) {
+		model.addAttribute("companyNo", companyNo);
+		
+		return "redirect:" + companyNo + "/address" ;
+		
+	}
+	
+	
+	
+
+}

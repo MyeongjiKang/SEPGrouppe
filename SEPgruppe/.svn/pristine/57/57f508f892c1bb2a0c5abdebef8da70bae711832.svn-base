@@ -1,0 +1,23 @@
+package kr.or.ddit.works.login.vo;
+
+import java.util.List;
+
+import lombok.Data;
+
+@Data
+public class AllUserVO {
+	
+	private String userId;
+	private String userPw;
+	private boolean retire;
+	private String target;
+
+	private List<String> authorities;
+
+	public String getCompanyNo() {
+		if (this instanceof CompaniesVO) {
+			return ((CompaniesVO) this).getCompanyNo();
+		}
+		return null;
+	}
+}

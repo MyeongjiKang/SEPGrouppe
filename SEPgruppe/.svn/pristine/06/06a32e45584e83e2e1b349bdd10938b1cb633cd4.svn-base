@@ -1,0 +1,41 @@
+<!-- 
+ * == 개정이력(Modification Information) ==
+ *   
+ *   수정일      			수정자           수정내용
+ *  ============   	============== =======================
+ *  2025. 3. 18.     	KMJ            최초 생성
+ *
+-->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<table class="table">
+    <thead>
+        <tr>
+            <th>아이디</th>
+            <th>일정명</th> 
+            <th>일정설명</th>
+            <th>일정시작일</th>
+            <th>일정종료일</th>
+            <th>일정장소</th>
+            <th>등록일시</th>
+            <th>일정상태</th>
+            <th>수정일시</th>
+        </tr>
+    </thead>
+    <tbody>
+        <c:forEach var="schedule" items="${schedule}">
+            <tr>
+                <td>${schedule.empId}</td>
+                <td>${schedule.schdlNm}</td>
+                <td>${schedule.schdlCn}</td>
+                <td>${schedule.schdlBgngYmd}</td>
+                <td>${schedule.schdlEndYmd}</td>
+                <td>${schedule.schdlLocation}</td>
+                <td>${schedule.schdlCreateDate}</td>
+                <td>${schedule.schdlStatus}</td>
+                <td>${schedule.schdlUpdateDate}</td>
+            </tr>
+        </c:forEach>
+    </tbody>
+</table>

@@ -1,0 +1,58 @@
+package kr.or.ddit.works.organization.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+ * 근태관리 컨트롤러
+ * 
+ * @author JYS
+ * @since 2025. 3. 12.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 12.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+@Controller
+//@RequestMapping("{companyNo}/dclz")
+@RequestMapping("/a001/dclz")
+public class DclzController {
+	
+	/** 관리자 - 전사 근태 관리 목록 조회 */
+//    @GetMapping("")
+//    public String selectListAllDclz(@PathVariable("companyNo") String companyNo) {
+//        return "gw:dclz/dclzList";
+//    }
+	@GetMapping("/")
+	public String selectListAllDclz() {
+		return "gw:dclz/dclzList";
+	}
+
+    /** 관리자 - 사원 별 근태 관리 조회 */
+    @GetMapping("/{empNo}")
+    public String selectDclz(@PathVariable("companyNo") String companyNo, 
+                             @PathVariable("empNo") String empNo) {
+        return "gw:dclz/dclzDetail";
+    }
+
+    /** 일반 사원 - 내 근태 관리 조회 */
+//    @GetMapping("/mydclz")
+//    public String selectMyDclz(@PathVariable("companyNo") String companyNo) {
+//        return "gw:dclz/myDclz";
+//    }
+    @GetMapping("/mydclz")
+    public String selectMyDclz() {
+    	return "gw:dclz/myDclz";
+    }
+	
+	
+
+}

@@ -1,0 +1,117 @@
+package kr.or.ddit.works.approval.service;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import kr.or.ddit.works.approval.vo.DocFormVO;
+import kr.or.ddit.works.mybatis.mappers.ApprDocMapper;
+
+/**
+ * 전자결재 서비스 임플
+ * 
+ * @author JYS
+ * @since 2025. 3. 17.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 17.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+@Service
+public class ApprDocServiceImpl implements ApprDocService {
+
+	@Autowired
+	private ApprDocMapper approvalMapper;
+	
+	/**
+	 * 결재 양식 폴더 전체 조회
+	 * @return 모든 양식 폴더 리스트
+	 */
+	@Override
+	public List<DocFormVO> selectListAllDocForm() {
+		return approvalMapper.selectListAllDocForm();
+	}
+
+	/**
+	 * 특정 폴더에 저장된 문서 리스트 조회
+	 * @param docFolderNo 양식 폴더 번호
+	 * @return 해당 폴더의 문서 리스트
+	 */
+	@Override
+	public List<DocFormVO> selectListSearchDocForm(@Param("docFrmName") String docFrmName) {
+		return approvalMapper.selectListSearchDocForm(docFrmName);
+	}
+
+	
+	/**
+     * 문서 상세보기
+     * @param docFrmNo 문서 번호
+     * @return
+     */
+	@Override
+	public DocFormVO selectdocFrmDeatil(@Param("docFrmNo")String docFrmNo) {
+		return approvalMapper.selectdocFrmDeatil(docFrmNo);
+	}
+
+	/**
+	 * 관리자 - 새 문서 추가
+	 * @param docFormVo 추가할 문서 정보
+	 * @return 성공 여부 (1: 성공, 0: 실패)
+	 */
+	@Override
+	public boolean insertDocForm(DocFormVO docFormVo) {
+		return approvalMapper.insertDocForm(docFormVo) > 0;
+	}
+
+	/**
+	 * 관리자 - 문서 HTML 콘텐츠 추가 또는 수정
+	 * @param docFormVo 수정할 문서 정보 (HTML 콘텐츠 포함)
+	 * @return 성공 여부 (1: 성공, 0: 실패)
+	 */
+	@Override
+	public boolean updateDocFormHtml(DocFormVO docFormVo) {
+		return approvalMapper.updateDocFormHtml(docFormVo) > 0;
+	}
+
+	/**
+	 * 관리자 - 문서 수정 (제목, 내용 등)
+	 * @param docFormVo 수정할 문서 정보
+	 * @return 성공 여부 (1: 성공, 0: 실패)
+	 */
+	@Override
+	public boolean updateDocForm(DocFormVO docFormVo) {
+		return approvalMapper.updateDocForm(docFormVo) > 0;
+	}
+
+	/**
+	 * 관리자 - 문서 비활성화 (삭제 대신 사용)
+	 * @param docFrmNo 문서 번호
+	 * @return 성공 여부 (1: 성공, 0: 실패)
+	 */
+	@Override
+	public boolean deactivateDocForm(String docFrmNo) {
+		return approvalMapper.deactivateDocForm(docFrmNo) > 0;
+	}
+
+	/**
+	 * 관리자 - 문서 활성화
+	 * @param docFrmNo 문서 번호
+	 * @return 성공 여부 (1: 성공, 0: 실패)
+	 */
+	@Override
+	public boolean activateDocForm(String docFrmNo) {
+		return approvalMapper.activateDocForm(docFrmNo) > 0;
+	}
+
+	
+
+	
+}

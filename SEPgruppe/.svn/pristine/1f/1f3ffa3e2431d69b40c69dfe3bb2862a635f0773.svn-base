@@ -1,0 +1,37 @@
+<!-- 
+ * == 개정이력(Modification Information) ==
+ *   
+ *   수정일      			수정자           수정내용
+ *  ============   	============== =======================
+ *  2025. 3. 12.     	JYS            최초 생성
+ *
+-->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<script src="${pageContext.request.contextPath }/resources/groupware/js/jquery-3.7.1.min.js"></script>
+<link href="${pageContext.request.contextPath }/resources/groupware/css/organization/organizationList.css" rel="stylesheet" type="text/css">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+	 <div class="container">
+        <!-- 왼쪽: 트리 메뉴 -->
+        <div class="tree-container">
+            <div class="org-title">조직도</div>
+        	 <div class="search-box">
+			    <input type="text" id="employee-search" placeholder="사원 이름 검색...">
+			    <button id="search-btn">검색</button>
+			 </div>
+			  <div id="employee-tree"></div>
+            <div id="depTree"></div>
+        </div>
+        
+        <!-- 오른쪽: 상세 정보 -->
+        <div class="detail-container">
+            <div id="detailContent">
+                <p>부서 또는 사원을 선택해주세요.</p>
+            </div>
+        </div>
+    </div>
+    <script src="${pageContext.request.contextPath}/resources/groupware/js/organization/organizationList.js"></script>
+    <script>
+    	var contextPath = "${pageContext.request.contextPath}";
+    	var companyNo = "${companyNo}";
+    </script>

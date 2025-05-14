@@ -1,0 +1,71 @@
+package kr.or.ddit.works.reservation.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import kr.or.ddit.paging.PaginationInfo;
+import kr.or.ddit.works.reservation.vo.MeetingRoomVO;
+
+/**
+ * 회의실 서비스 임플
+ * @author KKM
+ * @since 2025. 3. 14.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 14.     	KKM	          최초 생성
+ *
+ * </pre>
+ */
+@Service
+public class MeetingRoomServiceImpl implements MeetingRoomService {
+	private List<MeetingRoomVO> meetingRoomList = new ArrayList<>(); // 간단한 리스트로 회의실 정보 저장
+
+    @Override
+    public List<MeetingRoomVO> selectListAllRoom(PaginationInfo<MeetingRoomVO> paging) {
+        // 페이징 처리를 포함한 회의실 목록 반환 (여기서는 간단히 전체 리스트 반환)
+        return meetingRoomList;
+    }
+
+    @Override
+    public MeetingRoomVO selectRoomDetail(Long roomNo) {
+        // 회의실 번호로 회의실 정보 조회
+        return meetingRoomList.stream()
+                .filter(room -> room.getRoomNo().equals(roomNo))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public boolean insertRoom(MeetingRoomVO meetingroom) {
+        // 새로운 회의실 등록
+        return meetingRoomList.add(meetingroom);
+    }
+
+    @Override
+    public boolean updateRoom(MeetingRoomVO meetingroom) {
+        // 회의실 수정 로직
+        MeetingRoomVO existingRoom = selectRoomDetail(meetingroom.getRoomNo());
+        if (existingRoom != null) {
+            existingRoom.setRoomNm(meetingroom.getRoomNm());
+            existingRoom.setRoomLocation(meetingroom.getRoomLocation());
+            existingRoom.setRoomCapacity(meetingroom.getRoomCapacity());
+            existingRoom.setRoomStatus(meetingroom.getRoomStatus());
+            existingRoom.setRoomGuidelines(meetingroom.getRoomGuidelines());
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteRoom(Long roomNo) {
+        // 회의실 삭제 로직
+        return meetingRoomList.removeIf(room -> room.getRoomNo().equals(roomNo));
+    }
+}

@@ -1,0 +1,149 @@
+<!-- 
+ * == 개정이력(Modification Information) ==
+ *   
+ *   수정일      			수정자           수정내용
+ *  ============   	============== =======================
+ *  2025. 3. 14.     	JYS            최초 생성
+ *
+-->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<head>
+	<link href="${pageContext.request.contextPath }/resources/groupware/css/common.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath }/resources/groupware/css/project/projectList.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="card-body">
+	<ul class="nav nav-tabs nav-line nav-color-secondary" id="line-tab" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link active" id="line-home-tab" data-bs-toggle="pill" href="#line-home" role="tab" aria-controls="pills-home" aria-selected="true">업무</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" id="line-gantt-tab" data-bs-toggle="pill" href="#line-gantt" role="tab" aria-controls="pills-gantt" aria-selected="false">간트차트</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" id="line-calendar-tab" data-bs-toggle="pill" href="#line-calendar" role="tab" aria-controls="pills-calendar" aria-selected="false">캘린더</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" id="line-file-tab" data-bs-toggle="pill" href="#line-file" role="tab" aria-controls="pills-file" aria-selected="false">파일</a>
+		</li>
+	</ul>
+	<div class="tab-content mt-3 mb-3" id="line-tabContent">
+		<div class="tab-pane fade show active" id="line-home" role="tabpanel" aria-labelledby="line-home-tab">
+			<p>공유프로젝트 메인화면</p>
+
+		</div>
+		<div class="tab-pane fade" id="line-gantt" role="tabpanel" aria-labelledby="line-gantt-tab">
+			<p>간트차트</p>
+		</div>
+		<div class="tab-pane fade" id="line-calendar" role="tabpanel" aria-labelledby="line-calendar-tab">
+			<p>캘린더</p>
+		</div>
+		<div class="tab-pane fade" id="line-file" role="tabpanel" aria-labelledby="line-file-tab">
+			<p>파일</p>
+		</div>
+	</div>
+</div>
+
+
+<div class="biggestContainer">
+    <div class="buttonspart">
+        <h1>공유 프로젝트</h1>
+        <button class="btn btn-success">프로젝트 생성</button>
+        <div class="input-icon">
+           <input
+             type="text"
+             class="form-control"
+             placeholder="프로젝트명 검색..."
+           />
+           <span class="input-icon-addon">
+             <i class="fa fa-search"></i>
+           </span>
+         </div>
+    </div>
+ 
+    <nav class="tabs">
+    	<ul class="tabs-menu">
+	        <li>내 프로젝트:</li>
+	        <li>진행중</li>
+	        <li>종료</li>
+        </ul>
+    </nav>
+    
+    <nav class="hidden-tabs" id="hiddenTabs" style="display: none;">
+	 	<ul class="hidden-menu">
+	      <li><a href="#">열기</a></li>
+	      <li><a href="#">편집</a></li>
+	      <li id="deleteButton"><a href="#">삭제</a></li>
+	      <li><a href="#" id="closeHiddenTabs"><i class="far fa-times-circle"></i></a></li>
+	     </ul>
+    </nav>   
+    
+    <main class="project-container">
+        <table class="table table-striped mt-3">
+          <thead>
+            <tr>
+              <th scope="col"><input type="radio" name="project" value="1"></th>
+              <th scope="col">번호</th>
+              <th scope="col">아이디</th>
+              <th scope="col">제목</th>
+              <th scope="col">시작일</th>
+              <th scope="col">종료일</th>
+              <th scope="col">상태</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="radio" name="project" value="1"></td>
+              <td>1</td>
+              <td>가나다라</td>
+              <td>안녕하세요</td>
+              <td>2025-03-17</td>
+              <td>2025-03-18</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td><input type="radio" name="project" value="1"></td>
+              <td>2</td>
+              <td>마바사아</td>
+              <td>안녕</td>
+              <td>2015</td>
+              <td>2016</td>
+              <td>--</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <div class="pagination">
+           <ul class="pagination pg-primary">
+             <li class="page-item">
+               <a class="page-link" href="#" aria-label="Previous">
+                 <span aria-hidden="true">&laquo;</span>
+                 <span class="sr-only">Previous</span>
+               </a>
+             </li>
+             <li class="page-item active">
+               <a class="page-link" href="#">1</a>
+             </li>
+             <li class="page-item">
+               <a class="page-link" href="#">2</a>
+             </li>
+             <li class="page-item">
+               <a class="page-link" href="#">3</a>
+             </li>
+             <li class="page-item">
+               <a class="page-link" href="#" aria-label="Next">
+                 <span aria-hidden="true">&raquo;</span>
+                 <span class="sr-only">Next</span>
+               </a>
+             </li>
+           </ul>
+         </div>
+    </main>
+</div>    
+	<script src="${pageContext.request.contextPath }/resources/groupware/js/jquery-3.7.1.min.js"></script>
+	<script src="${pageContext.request.contextPath }/resources/groupware/js/common.js"></script>
+	<script src="${pageContext.request.contextPath }/resources/groupware/js/project/projectList.js"></script>
+</body>    

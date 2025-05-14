@@ -1,0 +1,86 @@
+/** 
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ * 2025. 3. 20.     	JYS            최초 생성
+ *
+ * </pre>
+ */
+// DOMContentLoaded 이벤트가 발생하면 실행
+document.addEventListener("DOMContentLoaded", () => {
+	const apprModal = document.querySelector('#newApprModal');
+	const basePath = window.location.pathname.split("/").slice(0, -1).join("/");
+	
+    // 결재 양식 전체 조회
+    apprModal.addEventListener('show.bs.modal', async () => {
+        try {
+            // Axios를 사용해 비동기로 결재 양식 데이터를 요청
+            const response = await axios.get(`${basePath}/approval/allDocuments`);
+            const resp = response.data; // 응답 데이터
+            const templateTree = document.querySelector("#templateTree"); // 트리 구조를 표시할 DOM 요소
+            templateTree.innerHTML = ""; // 기존 리스트를 비움
+
+            if (Object.keys(resp).length > 0) {
+                const fragment = document.createDocumentFragment(); // 성능 최적화를 위한 DocumentFragment (DOM 트리의 변경 사항을 메모리 상에서 처리)
+
+                // "No Parent" 폴더를 먼저 보여주기 위해 정렬
+                const sortedFolders = Object.entries(resp).sort(([a], [b]) => (a === "No Parent" ? -1 : b === "No Parent" ? 1 : 0));
+
+                sortedFolders.forEach(([parentFolderName, subFolders]) => {
+                    const parentFolderGroup = document.createElement("ul"); // 상위 폴더를 위한 리스트 생성
+                    parentFolderGroup.classList.add("list-group");
+
+                    // 상위 폴더 아이템 생성
+                    const parentFolderItem = document.createElement("li");
+                    parentFolderItem.classList.add("list-group-item", "active");
+                    parentFolderItem.textContent = `📂 ${parentFolderName}`; // 상위 폴더 이름
+                    parentFolderGroup.appendChild(parentFolderItem);
+
+                    // 각 하위 폴더 처리
+                    Object.entries(subFolders).forEach(([folderName, documents]) => {
+                        const folderGroup = document.createElement("ul"); // 하위 폴더를 위한 리스트 생성
+                        folderGroup.classList.add("list-group");
+
+                        // 하위 폴더 아이템 생성
+                        const folderItem = document.createElement("li");
+                        folderItem.classList.add("list-group-item", "active");
+                        folderItem.textContent = `📁 ${folderName}`; // 하위 폴더 이름
+                        folderGroup.appendChild(folderItem);
+
+                        // 하위 폴더에 속한 각 문서 처리
+                        documents.forEach(doc => {
+                            const docItem = document.createElement("li"); // 문서 아이템 생성
+                            docItem.classList.add("list-group-item");
+                            docItem.textContent = `📄 ${doc.docFrmName}`; // 문서 이름
+                            folderGroup.appendChild(docItem);
+                        });
+
+                        parentFolderGroup.appendChild(folderGroup); // 하위 폴더를 상위 폴더 그룹에 추가
+                    });
+
+                    fragment.appendChild(parentFolderGroup); // 상위 폴더 그룹을 Fragment에 추가
+                });
+
+                templateTree.appendChild(fragment); // 최종적으로 Fragment를 트리에 추가 (성능 최적화)
+            } else {
+                // 결과가 없을 경우 "결과 없음" 항목 추가
+                const noResultItem = document.createElement("li");
+                noResultItem.classList.add("list-group-item");
+                noResultItem.textContent = "결과 없음";
+                templateTree.appendChild(noResultItem);
+            }
+        } catch (error) {
+            // Axios 요청 실패 시 에러 처리
+            console.error("AXIOS Error:", error.response ? error.response.data : error.message);
+            alert(`AXIOS 요청 실패: ${error.response ? error.response.status : error.message}`);
+        }
+    });
+	
+	const content = document.querySelector("#content")
+	// 모달 내에 결재 양식 상세보기(ckEditor4)
+	
+	 
+});
+

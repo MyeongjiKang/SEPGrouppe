@@ -1,0 +1,34 @@
+@charset "UTF-8";
+
+
+
+.sepimg{
+	text-align: center;
+}
+
+#sep{
+	border: none;
+	background-color: rgb(61, 110, 75);
+	padding: 5%;
+}
+
+
+body {
+	background-color: rgb(61, 110, 75);
+}
+
+input[type="text"], input[type="password"], textarea {
+  	background-color: rgb(247, 239, 230);
+  	color: black;
+}
+
+#bottomTree{
+	background-color: rgb(61, 110, 75);
+	width: 20%;
+    height: auto; /* 비율 유지 */
+    border-color: rgb(61, 110, 75);
+}
+
+#footer {
+    text-align: center;	
+}

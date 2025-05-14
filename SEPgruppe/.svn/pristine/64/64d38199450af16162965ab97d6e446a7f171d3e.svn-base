@@ -1,0 +1,147 @@
+<!-- 
+ * == 개정이력(Modification Information) ==
+ *   
+ *   수정일      			수정자           수정내용
+ *  ============   	============== =======================
+ *  2025. 3. 13.     	JYS            최초 생성
+ *
+-->
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<head>
+	<link href="${pageContext.request.contextPath }/resources/groupware/css/dclz/myDclz.css" rel="stylesheet">
+</head>      
+    <header class="top-nav">
+       <nav class="nav-container">
+           <ul class="nav-menu">
+               <li><a href="#">내 근태 현황</a></li>
+               <li><a href="#">내 연차 내역</a></li>
+               <li><a href="#">내 인사 정보</a></li>
+           </ul>
+           
+           <div class="nav-right">
+               <span class="divider"></span>
+               <button class="lang-btn">🌍 EN ▼</button>
+               <ul class="nav-links">
+                   <li><a href="#">My Portal</a></li>
+                   <li><a href="#">나의 메일함</a></li>
+                   <li><a href="#">나의 일정</a></li>
+               </ul>
+               <button class="donate-btn">❤️ 로그아웃</button>
+           </div>
+       </nav>
+    </header>
+<body>
+    
+<div class="biggestContainer">
+    <div class="dclz-container">
+	    <div class="dclz">
+	    <h3>근태관리</h3>
+	    <p class="info" id="current-date"></p>
+	    <div class="time" id="current-time">--:--:--</div>
+	    
+	    <p class="info">출근시간 <span id="clock-in">미등록</span></p>
+	    <p class="info">퇴근시간 <span id="clock-out">미등록</span></p>
+	    <p class="info">주간 누적 근무시간 <span id="weekly-time">미등록</span></p>
+	    
+	    <button class="btn btn-primary btn-border btn-round">출근하기</button>
+	    <button class="btn btn-primary btn-border btn-round">퇴근하기</button>
+	    <div class="work-status-change">
+	    <button class="btn btn-primary btn-border btn-round">근무상태변경</button>
+	    </div>
+	    </div>
+	</div>
+    
+     <div class="content">
+       <div class="table-content">         
+		    <div class="accordion" id="workAccordion">
+		        <!-- 1주차 -->
+		        <div class="accordion-item">
+		            <h2 class="accordion-header">
+		                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#week1">
+		                    1 주차
+		                </button>
+		            </h2>
+		            <div id="week1" class="accordion-collapse collapse">
+		                <div class="accordion-body">
+		                    <div class="accordion-body">
+			                    <p><strong>누적 근무시간 1시간</strong></p>
+			                    <table class="table table-bordered">
+			                        <thead>
+			                            <tr>
+			                                <th>일자</th>
+			                                <th>업무 시작</th>
+			                                <th>업무 종료</th>
+			                                <th>총 근무시간</th>
+			                                <th>근무시간 상세</th>
+			                                <th>승인요청내역</th>
+			                            </tr>
+			                        </thead>
+			                        <tbody>
+			                            <tr>
+			                                <td>1일</td>
+			                                <td>9시</td>
+			                                <td>6시</td>
+			                                <td>8시간</td>
+			                                <td>어쩌구저쩌구</td>
+			                                <td>끼룩</td>
+			                            </tr>
+			                            <tr>
+			                                <td>2일</td>
+			                                <td>6시</td>
+			                                <td>1시</td>
+			                                <td>1시간</td>
+			                                <td>어쩌구저쩌구</td>
+			                                <td>깨룩</td>
+			                            </tr>
+			                        </tbody>
+			                    </table>
+			                </div>
+		                </div>
+		            </div>
+			        </div>
+			        <!-- 2주차 -->
+			        <div class="accordion-item">
+			            <h2 class="accordion-header">
+			                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#week2">
+			                    2 주차
+			                </button>
+			            </h2>
+			            <div id="week2" class="accordion-collapse collapse">
+			                <div class="accordion-body">
+			                    알아서 잘 쓰쇼잉
+			                </div>
+			            </div>
+			        </div>
+			        <!-- 3주차 -->
+			        <div class="accordion-item">
+			            <h2 class="accordion-header">
+			                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#week3">
+			                    3 주차
+			                </button>
+			            </h2>
+			            <div id="week3" class="accordion-collapse collapse">
+			                <div class="accordion-body">
+		                    알아서 잘 쓰쇼잉
+		                	</div>
+			            </div>
+			        </div>
+		       </div> 
+	         <div class="col-md-6">
+               <div class="card">
+                 <div class="card-header">
+                   <div class="card-title">Bar Chart</div>
+                 </div>
+                 <div class="card-body">
+                   <div class="chart-container">
+                     <canvas id="barChart"></canvas>
+                   </div>
+                 </div>
+               </div>
+             </div>   
+       </div>
+   </div>
+</div>
+	<script src="${pageContext.request.contextPath }/resources/groupware/js/common.js"></script>
+	<script src="${pageContext.request.contextPath }/resources/groupware/js/dclz/myDclz.js"></script>
+</body>

@@ -1,0 +1,12 @@
+package kr.or.ddit.works.mybatis.mappers;
+
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface CompanyMapper {
+
+	public int countByContactId(String contactId);
+
+	public int countByBusinessRegNo(String businessRegNo);
+
+}

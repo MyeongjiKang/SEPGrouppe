@@ -1,0 +1,37 @@
+package kr.or.ddit.works.approval.vo;
+
+import java.io.Serializable;
+
+import lombok.Data;
+
+/**
+ * 기안 APRVL_DOC VO
+ * @author JYS
+ * @since 2025. 3. 16.
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *   
+ *   수정일      			수정자           수정내용
+ *  -----------   	-------------    ---------------------------
+ *  2025. 3. 16.     	JYS	          최초 생성
+ *
+ * </pre>
+ */
+@Data
+public class AprvlDocVO implements Serializable{
+	
+	private Long aprvlDocNo;      		//기안번호
+	private Long docFrmNo;      		//양식번호
+	private String aprvlDocTitle;      	//제목
+	private String aprvlDocContents;    //내용
+	private String aprvlDocType;      	//기안타입
+	private String aprvlDocStatus;      //진행상태
+	private String important;      		//중요도
+	private String isEmergency;      	//긴급여부
+	private String submitDate;      	//상신날짜
+	private String closingDate;      	//마감날짜
+	private Long fileGroupNo;      		//파일그룹번호
+
+}

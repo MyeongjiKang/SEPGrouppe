@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+<Appenders>
+	<Console name="Console" target="SYSTEM_OUT">
+		<PatternLayout
+			pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{1.} - %msg%n" />
+	</Console>
+</Appenders>
+<Loggers>
+	<Root level="debug">
+		<AppenderRef ref="Console" />
+	</Root>
+	<Logger name="kr.or.ddit" level="info" additivity="false">
+        <AppenderRef ref="Console" />
+    </Logger>    
+	<Logger name="jdbc.sqltiming" level="debug" additivity="false">
+        <AppenderRef ref="Console" />
+    </Logger>    
+	<Logger name="jdbc.resultsettable" level="debug" additivity="false">
+        <AppenderRef ref="Console" />
+    </Logger>    
+	<Logger name="org.springframework" level="info" additivity="false">
+        <AppenderRef ref="Console" />
+    </Logger>    
+	<Logger name="org.springframework.context" level="info" additivity="false">
+        <AppenderRef ref="Console" />
+    </Logger>    
+	<Logger name="org.springframework.beans" level="info" additivity="false">
+        <AppenderRef ref="Console" />
+    </Logger>    
+	<Logger name="org.springframework.test" level="warn" additivity="false">
+        <AppenderRef ref="Console" />
+    </Logger>    
+	<Logger name="org.springframework.web" level="debug" additivity="false">
+        <AppenderRef ref="Console" />
+    </Logger>    
+</Loggers>
+</Configuration>

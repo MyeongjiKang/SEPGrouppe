@@ -1,0 +1,13 @@
+package kr.or.ddit.works.mail.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import kr.or.ddit.works.mybatis.mappers.MailMapper;
+
+@Service
+public class MailServiceImpl implements MailService {
+
+	@Autowired
+	private MailMapper mailMapper;
+}
