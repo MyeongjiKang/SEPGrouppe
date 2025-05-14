@@ -8,6 +8,8 @@ As the User Agent (UA), I led the front-end architecture and implementation, uti
 
 Despite the challenges inherent in a first team project, this holds significant meaning and is something I am very proud of.
 
+Any questions or feedback are always appreciated:)
+
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=flat-square&logo=openjdk&logoColor=white)
 ![Spring](https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=spring&logoColor=white)
 ![MyBatis](https://img.shields.io/badge/MyBatis-2B649A?style=flat-square&logo=mybatis&logoColor=white)
